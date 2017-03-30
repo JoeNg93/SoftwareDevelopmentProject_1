@@ -1,0 +1,12 @@
+{
+  "development": {
+    "MONGO_URI": "mongodb://localhost:27017/SoftwareDev",
+    "JWT_SECRET": "124qwfwqrty1d9678#!$&%",
+    "SESSION_SECRET": "1256&(#%)_@*(%ascx"
+  },
+  "test": {
+    "MONGO_URI": "mongodb://localhost:27017/SoftwareDevTest",
+    "JWT_SECRET": "1259607#%^^(!@_(#%",
+    "SESSION_SECRET": "125125(^#4^(@)%K"
+  }
+}
