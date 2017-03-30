@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "test": "export NODE_ENV=test && mocha src/back_end/tests/**/*.test.js",
+    "build": "webpack",
   },
   "author": "Dung Nguyen, Robert Barker, Juha Pekkarinen",
   "license": "ISC",
