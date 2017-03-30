@@ -12,7 +12,9 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx?$/,
-        exclude: ['node_modules', 'src/back_end', 'src/test_layout'],
+        include: [
+          path.resolve(__dirname, 'src', 'front_end')
+        ],
         loader: 'babel-loader'
       }
     ]
