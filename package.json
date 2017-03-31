@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "export NODE_ENV=test && mocha src/back_end/tests/**/*.test.js",
-    "build": "webpack",
+    "build": "webpack"
   },
   "author": "Dung Nguyen, Robert Barker, Juha Pekkarinen",
   "license": "ISC",

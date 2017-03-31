@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 
 router.get('/recipes', (req, res) => {
   Recipe.find().then((recipes) => {
-    res.send(recipes);
+    res.send({ recipes });
   }).catch((err) => {
     res.status(400).send();
   });
@@ -27,7 +27,7 @@ router.get('/recipe/:id', (req, res) => {
     if (!recipe) {
       res.status(404).send();
     }
-    res.send(recipe);
+    res.send({ recipe });
   }).catch((err) => {
     res.status(400).send();
   });
@@ -35,7 +35,7 @@ router.get('/recipe/:id', (req, res) => {
 
 router.get('/ingredients', (req, res) => {
   Ingredient.find().then((ingredients) => {
-    res.send(ingredients);
+    res.send({ ingredients });
   }).catch((err) => {
     res.status(400).send();
   });
@@ -46,9 +46,9 @@ router.get('/ingredient/:id', (req, res) => {
 
   Ingredient.findOne({_id: id}).then((ingredient) => {
     if (!ingredient) {
-      res.status(404).send():
+      res.status(404).send();
     }
-    res.send(ingredient);
+    res.send({ ingredient });
   }).catch((err) => {
     res.status(400).send();
   });
@@ -56,7 +56,7 @@ router.get('/ingredient/:id', (req, res) => {
 
 router.get('/categories', (req, res) => {
   Category.find().then((categories) => {
-    res.send(categories);
+    res.send({ categories });
   }).catch((err) => {
     res.status(400).send();
   });
@@ -69,7 +69,7 @@ router.get('/category/:id', (req, res) => {
     if (!category) {
       res.status(404).send();
     }
-    res.send(category);
+    res.send({ category });
   }).catch((err) => {
     res.status(400).send();
   });
