@@ -9,14 +9,13 @@ const RecipeSchema = new mongoose.Schema({
   ingredients: [
     {
       _id: mongoose.Schema.Types.ObjectId,
-      quantity: String,
+      quantity: Number,
       name: String
     }
   ],
   cookingTime: Number,
   numOfMeals: Number,
-  difficulty: Number,
-  instructions: String,
+  instructions: [String],
   numOfLikes: Number,
   numOfDislikes: Number
 });
