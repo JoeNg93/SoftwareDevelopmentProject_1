@@ -8,6 +8,9 @@ const { User } = require('./../models/users');
 
 const router = express.Router();
 
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: false }));
+
 router.get('/', (req, res) => {
   res.send('API is working');
 });
@@ -23,7 +26,7 @@ router.get('/recipes', (req, res) => {
 router.get('/recipe/:id', (req, res) => {
   const id = req.params.id;
 
-  Recipe.findOne({_id: id}).then((recipe) => {
+  Recipe.findOne({ _id: id }).then((recipe) => {
     if (!recipe) {
       res.status(404).send();
     }
@@ -31,6 +34,29 @@ router.get('/recipe/:id', (req, res) => {
   }).catch((err) => {
     res.status(400).send();
   });
+});
+
+router.get('/recipe', (req, res) => {
+  if (req.query.ingredients === undefined) {
+    res.status(400).send();
+  }
+
+  const ingredients = req.query.ingredients.split(",").map(ingredient => ingredient.trim());
+
+  Recipe.findByIngredients(ingredients)
+    .then((recipes) => {
+      if (recipes.length == 0) {
+        res.status(404).send();
+      }
+      res.send({ recipes });
+    })
+    .catch((err) => {
+      res.status(400).send();
+    });
+});
+
+router.post('/recipe', (req, res) => {
+  res.send('Under development');
 });
 
 router.get('/ingredients', (req, res) => {
@@ -44,7 +70,7 @@ router.get('/ingredients', (req, res) => {
 router.get('/ingredient/:id', (req, res) => {
   const id = req.params.id;
 
-  Ingredient.findOne({_id: id}).then((ingredient) => {
+  Ingredient.findOne({ _id: id }).then((ingredient) => {
     if (!ingredient) {
       res.status(404).send();
     }
@@ -52,6 +78,10 @@ router.get('/ingredient/:id', (req, res) => {
   }).catch((err) => {
     res.status(400).send();
   });
+});
+
+router.post('/ingredient', (req, res) => {
+  res.send('Under development');
 });
 
 router.get('/categories', (req, res) => {
@@ -65,7 +95,7 @@ router.get('/categories', (req, res) => {
 router.get('/category/:id', (req, res) => {
   const id = req.params.id;
 
-  Category.findOne({_id: id}).then((category) => {
+  Category.findOne({ _id: id }).then((category) => {
     if (!category) {
       res.status(404).send();
     }
@@ -73,6 +103,10 @@ router.get('/category/:id', (req, res) => {
   }).catch((err) => {
     res.status(400).send();
   });
+});
+
+router.post('/category', (req, res) => {
+  res.send('Under development');
 });
 
 module.exports = router;
