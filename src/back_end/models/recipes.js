@@ -8,7 +8,7 @@ const RecipeSchema = new mongoose.Schema({
   image: String,
   ingredients: [
     {
-      _id: mongoose.Schema.Types.ObjectId,
+      _id: String,
       quantity: Number,
       name: String
     }
@@ -19,6 +19,16 @@ const RecipeSchema = new mongoose.Schema({
   numOfLikes: Number,
   numOfDislikes: Number
 });
+
+RecipeSchema.statics.findByIngredients = function (ingredients) {
+  return Recipe.find({
+    ingredients: {
+      $elemMatch: {
+        name: { $in: ingredients }
+      }
+    }
+  });
+};
 
 const Recipe = mongoose.model('Recipe', RecipeSchema);
 
