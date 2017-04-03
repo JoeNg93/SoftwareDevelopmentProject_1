@@ -96,7 +96,7 @@ describe('GET /recipes', () => {
       .get('/api/recipes')
       .expect(200)
       .expect((res) => {
-        expect(res.body.recipes).to.have.length(recipes[0].length);
+        expect(res.body.recipes).to.have.length(recipes.length);
       })
       .end(done);
   });
@@ -123,6 +123,36 @@ describe('GET /recipe/:id', () => {
   it('should return 400 if id is invalid', (done) => {
     request(app)
       .get('/api/recipe/iegcac')
+      .expect(400)
+      .end(done);
+  });
+});
+
+describe('GET /recipe', () => {
+  it('should return a list of recipes with valid ingredients query', (done) => {
+    const ingredients = ['eggs', 'onion'];
+
+    request(app)
+      .get(`/api/recipe?ingredients=${ingredients}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.recipes).to.have.length(3);
+      })
+      .end(done);
+  });
+
+  it('should return 404 not found if the ingredients query is empty', (done) => {
+    const ingredients = [];
+
+    request(app)
+      .get(`/api/recipe?ingredients=${ingredients}`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 400 without ingredients query', (done) => {
+    request(app)
+      .get('/api/recipe?test=5')
       .expect(400)
       .end(done);
   });
