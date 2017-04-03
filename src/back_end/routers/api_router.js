@@ -6,6 +6,8 @@ const { Ingredient } = require('./../models/ingredients');
 const { Recipe } = require('./../models/recipes');
 const { User } = require('./../models/users');
 
+const { ObjectID } = require('mongodb');
+
 const router = express.Router();
 
 router.use(bodyParser.json());
@@ -56,7 +58,21 @@ router.get('/recipe', (req, res) => {
 });
 
 router.post('/recipe', (req, res) => {
-  res.send('Under development');
+  const recipe = new Recipe({
+    name: req.body.name,
+    image: req.body.image || '',
+    ingredients: req.body.ingredients || [],
+    cookingTime: req.body.cookingTime || 0,
+    numOfMeals: req.body.numOfMeals || 1,
+    instructions: req.body.instructions || [],
+  });
+
+  recipe.save().then((doc) => {
+    res.send({ recipe: doc });
+  }).catch((err) => {
+    res.status(400).send();
+  });
+
 });
 
 router.get('/ingredients', (req, res) => {
@@ -81,7 +97,20 @@ router.get('/ingredient/:id', (req, res) => {
 });
 
 router.post('/ingredient', (req, res) => {
-  res.send('Under development');
+  const ingredient = new Ingredient({
+    name: req.body.name,
+    categoryID: req.body.categoryID
+  });
+
+  if (!ObjectID.isValid(ingredient.categoryID)) {
+    res.status(400).send();
+  }
+
+  ingredient.save().then((doc) => {
+    res.send({ ingredient: doc });
+  }).catch((err) => {
+    res.status(400).send(err);
+  });
 });
 
 router.get('/categories', (req, res) => {
@@ -106,7 +135,15 @@ router.get('/category/:id', (req, res) => {
 });
 
 router.post('/category', (req, res) => {
-  res.send('Under development');
+  const category = new Category({
+    name: req.body.name,
+  });
+
+  category.save().then((doc) => {
+    res.send({ category: doc });
+  }).catch((err) => {
+    res.status(400).send();
+  });
 });
 
 module.exports = router;
