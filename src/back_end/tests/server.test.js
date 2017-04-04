@@ -7,6 +7,10 @@ const { expect } = require('chai');
 
 const { recipes, ingredients, users, categories }  = require('./seed');
 
+const { Category } = require('./../models/categories');
+const { Ingredient } = require('./../models/ingredients');
+const { Recipe } = require('./../models/recipes');
+
 const { populateCategories, populateIngredients, populateRecipes, populateUsers } = require('./seed');
 
 beforeEach(populateCategories);
@@ -51,6 +55,81 @@ describe('GET /category/:id', () => {
   });
 });
 
+describe('GET /category/:id/ingredients', () => {
+  it('should return a list of ingredients with exist category id', (done) => {
+    request(app)
+      .get(`/api/category/${categories[4]._id}/ingredients`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.ingredients).to.have.length(2);
+        expect(res.body.ingredients[0]._id).to.equal(ingredients[8]._id.toHexString());
+      })
+      .end(done);
+  });
+
+  it('should return 404 if id is not found', (done) => {
+    const fakeID = new ObjectID();
+
+    request(app)
+      .get(`/api/category/${fakeID}/ingredients`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 400 with invalid id', (done) => {
+    request(app)
+      .get('/api/category/h245@/ingredients')
+      .expect(400)
+      .end(done);
+  });
+
+  it('should return 404 if no ingredients in the category', (done) => {
+    const categoryID = categories[5]._id;
+
+    request(app)
+      .get(`/api/category/${categoryID}/ingredients`)
+      .expect(404)
+      .end(done);
+  });
+});
+
+describe('POST /category', () => {
+  it('should return an inserted category', (done) => {
+    const category = {
+      name: 'test'
+    };
+
+    request(app)
+      .post('/api/category')
+      .send(category)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.category.name).to.equal(category.name);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        Category.findOne({ _id: res.body.category._id }).then((data) => {
+          expect(data.name).to.equal(category.name);
+          done();
+        }).catch((err) => {
+          done(err);
+        });
+      });
+  });
+
+  it('should not insert category without name', (done) => {
+    const category = {};
+
+    request(app)
+      .post('/api/category')
+      .send(category)
+      .expect(400)
+      .end(done);
+  });
+});
+
 describe('GET /ingredients', () => {
   it('should return a list of ingredients', (done) => {
     request(app)
@@ -70,7 +149,7 @@ describe('GET /ingredient/:id', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.ingredient._id).to.equal(ingredients[0]._id.toHexString());
-        expect(res.body.ingredient.category).to.equal(categories[0]._id.toHexString());
+        expect(res.body.ingredient.categoryID).to.equal(categories[0]._id.toHexString());
       })
       .end(done);
   });
@@ -85,6 +164,57 @@ describe('GET /ingredient/:id', () => {
   it('should return 400 if id is invalid', (done) => {
     request(app)
       .get('/api/ingredient/2334124(@*%')
+      .expect(400)
+      .end(done);
+  });
+});
+
+describe('POST /ingredient', () => {
+  it('should return an inserted ingredient', (done) => {
+    const ingredient = {
+      name: 'yoloIngredient',
+      categoryID: categories[0]._id.toHexString()
+    };
+
+    request(app)
+      .post('/api/ingredient')
+      .send(ingredient)
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        Ingredient.findOne({ _id: res.body.ingredient._id }).then((doc) => {
+          expect(doc.name).to.equal(ingredient.name);
+          expect(doc.categoryID).to.equal(ingredient.categoryID);
+          done();
+        }).catch((err) => {
+          done(err);
+        });
+      });
+  });
+
+  it('should not insert ingredient without name', (done) => {
+    const ingredient = {
+      categoryID: categories[0]._id.toHexString()
+    };
+
+    request(app)
+      .post('/api/ingredient')
+      .send(ingredient)
+      .expect(400)
+      .end(done);
+  });
+
+  it('should not insert ingredient with invalid ObjectID', (done) => {
+    const ingredient = {
+      name: 'Wow',
+      categoryID: '3515@%'
+    };
+
+    request(app)
+      .post('/api/ingredient')
+      .send(ingredient)
       .expect(400)
       .end(done);
   });
@@ -157,3 +287,4 @@ describe('GET /recipe', () => {
       .end(done);
   });
 });
+
