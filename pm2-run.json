@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "var-ingredient",
+      "script": "./src/back_end/server/server.js",
+      "watch": false
+    }
+  ]
+}
