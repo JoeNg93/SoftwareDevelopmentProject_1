@@ -97,20 +97,28 @@ router.get('/ingredient/:id', (req, res) => {
 });
 
 router.post('/ingredient', (req, res) => {
-  const ingredient = new Ingredient({
-    name: req.body.name,
-    categoryID: req.body.categoryID
-  });
+  const categoryID = req.body.categoryID;
 
-  if (!ObjectID.isValid(ingredient.categoryID)) {
+  if (!ObjectID.isValid(categoryID)) {
     res.status(400).send();
   }
 
-  ingredient.save().then((doc) => {
+  Category.findOne({ _id: categoryID }).then((category) => {
+    if (!category) {
+      res.status(404).send();
+    }
+    const ingredient = new Ingredient({
+      name: req.body.name,
+      categoryID: category._id,
+      categoryName: category.name
+    });
+    return ingredient.save();
+  }).then((doc) => {
     res.send({ ingredient: doc });
   }).catch((err) => {
-    res.status(400).send(err);
+    res.status(400).send();
   });
+
 });
 
 router.get('/categories', (req, res) => {
