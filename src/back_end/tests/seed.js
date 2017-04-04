@@ -101,7 +101,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: "Barefoot Contessa's Oven Roasted Bacon",
-    image: '',
+    image: 'https://lorempixel.com/250/250',
     ingredients: [
       {
         _id: ingredients[0]._id,
@@ -124,7 +124,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: "Captain Blue's Grill-Roasted Onions",
-    image: '',
+    image: 'https://lorempixel.com/250/250',
     ingredients: [
       {
         _id: ingredients[2]._id,
@@ -148,7 +148,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: 'Boiled Eggs',
-    image: '',
+    image: 'https://lorempixel.com/250/250',
     ingredients: [
       {
         _id: ingredients[4]._id,
@@ -169,7 +169,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: 'Chive Oil',
-    image: '',
+    image: 'https://lorempixel.com/250/250',
     ingredients: [
       {
         _id: ingredients[6]._id,
@@ -195,7 +195,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: 'Things that have both eggs and onion',
-    image: '',
+    image: 'https://lorempixel.com/250/250',
     ingredients: [
       {
         _id: ingredients[4]._id,
