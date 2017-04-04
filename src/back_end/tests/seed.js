@@ -8,23 +8,27 @@ const { User } = require('./../models/users');
 const categories = [
   {
     _id: new ObjectID(),
-    name: 'Meats'
+    name: 'meats'
   },
   {
     _id: new ObjectID(),
-    name: 'Vegetables'
+    name: 'vegetables'
   },
   {
     _id: new ObjectID(),
-    name: 'Dairy'
+    name: 'dairy'
   },
   {
     _id: new ObjectID(),
-    name: 'Spices'
+    name: 'spices'
   },
   {
     _id: new ObjectID(),
-    name: 'Oils'
+    name: 'oils'
+  },
+  {
+    _id: new ObjectID(),
+    name: 'fuck'
   }
 ];
 
@@ -34,52 +38,62 @@ const ingredients = [
   {
     _id: new ObjectID(),
     name: 'bacon',
-    category: categories[0]._id
+    categoryID: categories[0]._id,
+    categoryName: categories[0].name
   },
   {
     _id: new ObjectID(),
     name: 'ground beef',
-    category: categories[0]._id
+    categoryID: categories[0]._id,
+    categoryName: categories[0].name
   },
   {
     _id: new ObjectID(),
     name: 'onion',
-    category: categories[1]._id
+    categoryID: categories[1]._id,
+    categoryName: categories[1].name
   },
   {
     _id: new ObjectID(),
     name: 'chili pepper',
-    category: categories[1]._id
+    categoryID: categories[1]._id,
+    categoryName: categories[1].name
   },
   {
     _id: new ObjectID(),
     name: 'eggs',
-    category: categories[2]._id
+    categoryID: categories[2]._id,
+    categoryName: categories[2].name
   },
   {
     _id: new ObjectID(),
     name: 'cream',
-    category: categories[2]._id
+    categoryID: categories[2]._id,
+    categoryName: categories[2].name
   },
   {
     _id: new ObjectID(),
     name: 'chive',
-    category: categories[3]._id
+    categoryID: categories[3]._id,
+    categoryName: categories[3].name
   },
   {
     _id: new ObjectID(),
     name: 'garlic powder',
-    category: categories[3]._id
+    categoryID: categories[3]._id,
+    categoryName: categories[3].name
   },
   {
     _id: new ObjectID(),
     name: 'olive oil',
-    category: categories[4]._id
+    categoryID: categories[4]._id,
+    categoryName: categories[4].name
   },
   {
     _id: new ObjectID(),
     name: 'peanut oil',
-    category: categories[4]._id
+    categoryID: categories[4]._id,
+    categoryName: categories[4].name
   }
 ];
 
@@ -177,6 +191,30 @@ const recipes = [
     ],
     numOfLikes: 5612,
     numOfDislikes: 125
+  },
+  {
+    _id: new ObjectID(),
+    name: 'Things that have both eggs and onion',
+    image: '',
+    ingredients: [
+      {
+        _id: ingredients[4]._id,
+        quantity: 3,
+        name: 'eggs'
+      },
+      {
+        _id: ingredients[2]._id,
+        quantity: 100,
+        name: 'onion'
+      }
+    ],
+    cookingTime: 10,
+    numOfMeals: 2,
+    instructions: [
+      'Ask your girlfriend'
+    ],
+    numOfLikes: 1523,
+    numOfDislikes: 30
   }
 ];
 
