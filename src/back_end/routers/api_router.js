@@ -134,6 +134,24 @@ router.get('/category/:id', (req, res) => {
   });
 });
 
+router.get('/category/:id/ingredients', (req, res) => {
+  const id = req.params.id;
+
+  Category.findOne({ _id: id }).then((category) => {
+    if (!category) {
+      res.status(404).send();
+    }
+    return Ingredient.find({ categoryID: category._id.toHexString() });
+  }).then((ingredients) => {
+    if (ingredients.length == 0) {
+      res.status(404).send();
+    }
+    res.send({ ingredients });
+  }).catch((err) => {
+    res.status(400).send();
+  });
+});
+
 router.post('/category', (req, res) => {
   const category = new Category({
     name: req.body.name,
