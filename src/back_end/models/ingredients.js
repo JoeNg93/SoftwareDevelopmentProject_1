@@ -5,7 +5,8 @@ const IngredientSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  categoryID: String
+  categoryID: String,
+  categoryName: String
 });
 
 const Ingredient = mongoose.model('Ingredient', IngredientSchema);
