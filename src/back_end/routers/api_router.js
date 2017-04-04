@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const formidable = require('express-formidable');
 
 const { Category } = require('./../models/categories');
 const { Ingredient } = require('./../models/ingredients');
@@ -10,8 +10,7 @@ const { ObjectID } = require('mongodb');
 
 const router = express.Router();
 
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: false }));
+router.use(formidable());
 
 router.get('/', (req, res) => {
   res.send('API is working');
@@ -58,13 +57,19 @@ router.get('/recipe', (req, res) => {
 });
 
 router.post('/recipe', (req, res) => {
+  const fields = req.fields;
+  const files = req.files;
   const recipe = new Recipe({
-    name: req.body.name,
-    image: req.body.image || '',
-    ingredients: req.body.ingredients || [],
-    cookingTime: req.body.cookingTime || 0,
-    numOfMeals: req.body.numOfMeals || 1,
-    instructions: req.body.instructions || [],
+    name: fields.name,
+    image: {
+      _id: fields.image._id,
+      versionId: fields.image.version_id,
+      imageType: fields.image.type
+    },
+    ingredients: fields.ingredients || [],
+    cookingTime: fields.cookingTime || 0,
+    numOfMeals: fields.numOfMeals || 1,
+    instructions: fields.instructions || [],
   });
 
   recipe.save().then((doc) => {
@@ -97,7 +102,8 @@ router.get('/ingredient/:id', (req, res) => {
 });
 
 router.post('/ingredient', (req, res) => {
-  const categoryID = req.body.categoryID;
+  const fields = req.fields;
+  const categoryID = fields.categoryID;
 
   if (!ObjectID.isValid(categoryID)) {
     res.status(400).send();
@@ -108,7 +114,7 @@ router.post('/ingredient', (req, res) => {
       res.status(404).send();
     }
     const ingredient = new Ingredient({
-      name: req.body.name,
+      name: fields.name,
       categoryID: category._id,
       categoryName: category.name
     });
@@ -161,8 +167,9 @@ router.get('/category/:id/ingredients', (req, res) => {
 });
 
 router.post('/category', (req, res) => {
+  const fields = req.fields;
   const category = new Category({
-    name: req.body.name,
+    name: fields.name
   });
 
   category.save().then((doc) => {
