@@ -1,5 +1,7 @@
 const { app } = require('./../server/server');
 
+const { addIngredientName } = require('./../routers/api_router');
+
 const { ObjectID } = require('mongodb');
 
 const request = require('supertest');
@@ -288,3 +290,122 @@ describe('GET /recipe', () => {
   });
 });
 
+describe('POST /recipe/:id/increaseLike', () => {
+  it('should increase numOfLikes by 1 with valid id', (done) => {
+    request(app)
+      .post(`/api/recipe/${recipes[0]._id}/increaseLike`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.recipe.numOfLikes).to.equal(recipes[0].numOfLikes + 1);
+      })
+      .end(done);
+  });
+
+  it('should return 404 if the id is not found', (done) => {
+    request(app)
+      .post(`/api/recipe/${new ObjectID()}/increaseLike`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 400 if id is not valid', (done) => {
+    request(app)
+      .post(`/api/recipe/125$!/increaseLike`)
+      .expect(400)
+      .end(done);
+  });
+});
+
+describe('POST /recipe/:id/decreaseLike', () => {
+  it('should decrease numOfLikes by 1 with valid id', (done) => {
+    request(app)
+      .post(`/api/recipe/${recipes[0]._id}/decreaseLike`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.recipe.numOfLikes).to.equal(recipes[0].numOfLikes - 1);
+      })
+      .end(done);
+  });
+
+  it('should return 404 if the id is not found', (done) => {
+    request(app)
+      .post(`/api/recipe/${new ObjectID()}/decreaseLike`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 400 if id is not valid', (done) => {
+    request(app)
+      .post(`/api/recipe/125$!/decreaseLike`)
+      .expect(400)
+      .end(done);
+  });
+});
+
+describe('POST /recipe/:id/increaseDislike', () => {
+  it('should increase numOfDislikes by 1 with valid id', (done) => {
+    request(app)
+      .post(`/api/recipe/${recipes[0]._id}/increaseDislike`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.recipe.numOfDislikes).to.equal(recipes[0].numOfDislikes + 1);
+      })
+      .end(done);
+  });
+
+  it('should return 404 if the id is not found', (done) => {
+    request(app)
+      .post(`/api/recipe/${new ObjectID()}/increaseDislike`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 400 if id is not valid', (done) => {
+    request(app)
+      .post(`/api/recipe/125$!/increaseDislike`)
+      .expect(400)
+      .end(done);
+  });
+});
+
+describe('POST /recipe/:id/decreaseDislike', () => {
+  it('should decrease numOfDislikes by 1 with valid id', (done) => {
+    request(app)
+      .post(`/api/recipe/${recipes[0]._id}/decreaseDislike`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.recipe.numOfDislikes).to.equal(recipes[0].numOfDislikes - 1);
+      })
+      .end(done);
+  });
+
+  it('should return 404 if the id is not found', (done) => {
+    request(app)
+      .post(`/api/recipe/${new ObjectID()}/decreaseDislike`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 400 if id is not valid', (done) => {
+    request(app)
+      .post(`/api/recipe/125$!/decreaseDislike`)
+      .expect(400)
+      .end(done);
+  });
+});
+
+describe('Test addIngredientName functionality', () => {
+  it('should return a new ingredient array with name property inside', (done) => {
+    const ingredientTest = [
+      { _id: ingredients[0]._id },
+      { _id: ingredients[1]._id }
+    ];
+    addIngredientName(ingredientTest).then((newIngredients) => {
+      expect(newIngredients).to.have.length(2);
+      expect(newIngredients[0].name).to.equal(ingredients[0].name);
+      done();
+    }).catch((err) => {
+      done(err);
+    });
+  });
+});
