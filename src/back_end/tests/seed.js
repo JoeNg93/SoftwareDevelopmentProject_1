@@ -101,6 +101,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: "Barefoot Contessa's Oven Roasted Bacon",
+    description: 'Fake description 1',
     image: {
       _id: 'd2syxoq3xatkj516r3wb',
       versionId: 'v1491336195',
@@ -128,6 +129,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: "Captain Blue's Grill-Roasted Onions",
+    description: 'Fake description 2',
     image: {
       _id: 'yktrqrqsmlrf2ct5eca2',
       versionId: 'v1491336210',
@@ -156,6 +158,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: 'Boiled Eggs',
+    description: 'Fake description 3',
     image: {
       _id: 'c23rhh7jdphrv9srea8a',
       versionId: 'v1491336203',
@@ -181,6 +184,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: 'Chive Oil',
+    description: 'Fake description 4',
     image: {
       _id: 'swe1h5phbi1g2bljbthc',
       versionId: 'v1491336217',
@@ -211,6 +215,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: 'Things that have both eggs and onion',
+    description: 'Fake description 5',
     image: {
       _id: 'vqkcn3r180xzc5aikh9e',
       versionId: 'v1491336232',
