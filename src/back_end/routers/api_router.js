@@ -109,7 +109,7 @@ router.get('/recipe', (req, res) => {
         return new Promise((resolve, reject) => {
           const totalIngredients = recipe.ingredients.length;
           const numOfIngredientsHave = recipe.ingredients.filter(ingredient => ingredients.indexOf(ingredient.name) != -1).length;
-          resolve(Object.assign({}, { totalIngredients, numOfIngredientsHave }, recipe._doc));
+          resolve(Object.assign({}, recipe._doc, { totalIngredients, numOfIngredientsHave }));
         });
       });
       return Promise.all(promiseQueues);
