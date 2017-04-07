@@ -105,18 +105,16 @@ router.get('/recipe', (req, res) => {
       if (recipes.length == 0) {
         res.status(404).send();
       }
-      const promiseQueues = recipes.map((recipe) => {
+      let promiseQueues = recipes.map((recipe) => {
         return new Promise((resolve, reject) => {
           const totalIngredients = recipe.ingredients.length;
           const numOfIngredientsHave = recipe.ingredients.filter(ingredient => ingredients.indexOf(ingredient.name) != -1).length;
-          resolve(Object.assign(recipe, { totalIngredients, numOfIngredientsHave }));
+          resolve(Object.assign({}, { totalIngredients, numOfIngredientsHave }, recipe._doc));
         });
       });
       return Promise.all(promiseQueues);
     })
-    .then((recipes) => {
-      res.send({ recipes });
-    })
+    .then((recipes) => res.send({ recipes }))
     .catch(err => res.status(400).send(err));
 });
 
