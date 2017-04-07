@@ -1,5 +1,7 @@
 const express = require('express');
 const formidable = require('express-formidable');
+const cloudinary = require('cloudinary');
+const path = require('path');
 
 const { Category } = require('./../models/categories');
 const { Ingredient } = require('./../models/ingredients');
@@ -10,7 +12,17 @@ const { ObjectID } = require('mongodb');
 
 const router = express.Router();
 
-router.use(formidable());
+
+router.use(formidable({
+  uploadDir: path.resolve(__dirname, '..', 'images'),
+  keepExtensions: true
+}));
+
+cloudinary.config({
+  cloud_name: 'dicyn7jds',
+  api_key: '785114968596375',
+  api_secret: 'e9LjJaNFsCVKQwetKpU09wtzR9g'
+});
 
 router.get('/', (req, res) => {
   res.send('API is working');
@@ -37,6 +49,50 @@ router.get('/recipe/:id', (req, res) => {
   });
 });
 
+router.post('/recipe/:id/increaseLike', (req, res) => {
+  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfLikes: 1 } }, { new: true })
+    .then((recipe) => {
+      if (!recipe) {
+        res.status(404).send();
+      }
+      res.send({ recipe });
+    })
+    .catch(err => res.status(400).send(err));
+});
+
+router.post('/recipe/:id/decreaseLike', (req, res) => {
+  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfLikes: -1 } }, { new: true })
+    .then((recipe) => {
+      if (!recipe) {
+        res.status(404).send();
+      }
+      res.send({ recipe });
+    })
+    .catch(err => res.status(400).send());
+});
+
+router.post('/recipe/:id/increaseDislike', (req, res) => {
+  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfDislikes: 1 } }, { new: true })
+    .then((recipe) => {
+      if (!recipe) {
+        res.status(404).send();
+      }
+      res.send({ recipe });
+    })
+    .catch(err => res.status(400).send());
+});
+
+router.post('/recipe/:id/decreaseDislike', (req, res) => {
+  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfDislikes: -1 } }, { new: true })
+    .then((recipe) => {
+      if (!recipe) {
+        res.status(404).send();
+      }
+      res.send({ recipe });
+    })
+    .catch(err => res.status(400).send());
+});
+
 router.get('/recipe', (req, res) => {
   if (req.query.ingredients === undefined) {
     res.status(400).send();
@@ -56,29 +112,63 @@ router.get('/recipe', (req, res) => {
     });
 });
 
-router.post('/recipe', (req, res) => {
-  const fields = req.fields;
-  const files = req.files;
-  const recipe = new Recipe({
-    name: fields.name,
-    image: {
-      _id: fields.image._id,
-      versionId: fields.image.version_id,
-      imageType: fields.image.type
-    },
-    ingredients: fields.ingredients || [],
-    cookingTime: fields.cookingTime || 0,
-    numOfMeals: fields.numOfMeals || 1,
-    instructions: fields.instructions || [],
-  });
+router.post('/images/upload', (req, res) => {
+  const localImagePath = files.image.path;
+  uploadImageToCDN(localImagePath)
+    .then(imageCDNInfo => res.send(imageCDNInfo))
+    .catch(err => res.status(400).send());
+});
 
-  recipe.save().then((doc) => {
-    res.send({ recipe: doc });
-  }).catch((err) => {
-    res.status(400).send();
-  });
+router.post('/recipe', (req, res) => {
+  const { fields } = req;
+
+  let recipe = {
+    name: fields.name,
+    cookingTime: fields.cookingTime || 0,
+    image: fields.image,
+    numOfMeals: fields.numOfMeals || 1,
+    instructions: fields.instructions || []
+  };
+
+  const ingredients = fields.ingredients;
+  addIngredientName(ingredients)
+    .then((ingredientsWithName) => {
+      Object.assign(recipe, { ingredients: ingredientsWithName });
+      recipe = new Recipe(recipe);
+      return recipe.save();
+    })
+    .then(doc => res.send({ recipe: doc }))
+    .catch(err => res.status(400).send());
 
 });
+
+function addIngredientName(ingredients) {
+  const promiseQueues = [];
+  ingredients.forEach((ingredient) => {
+    promiseQueues.push(Ingredient.findOne({ _id: ingredient._id }).then((doc) => {
+      if (!doc) return Promise.reject('id not found');
+      return Object.assign({}, ingredient, { _id: doc._id, name: doc.name });
+    }));
+  });
+
+  return Promise.all(promiseQueues);
+}
+
+function uploadImageToCDN(localImagePath) {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload(localImagePath, function handleResponse(response) {
+      let { public_id, version, format } = response;
+
+      const image = {
+        _id: public_id,
+        versionId: `v${version}`,
+        imageType: format
+      };
+
+      resolve(image);
+    });
+  });
+}
 
 router.get('/ingredients', (req, res) => {
   Ingredient.find().then((ingredients) => {
@@ -179,4 +269,7 @@ router.post('/category', (req, res) => {
   });
 });
 
-module.exports = router;
+module.exports = {
+  router,
+  addIngredientName
+};
