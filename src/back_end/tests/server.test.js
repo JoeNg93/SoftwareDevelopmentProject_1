@@ -260,7 +260,7 @@ describe('GET /recipe/:id', () => {
   });
 });
 
-describe('GET /recipe', () => {
+describe('GET /recipe?ingredients=', () => {
   it('should return a list of recipes with valid ingredients query', (done) => {
     const ingredients = ['eggs', 'onion'];
 
@@ -269,6 +269,8 @@ describe('GET /recipe', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.recipes).to.have.length(3);
+        expect(res.body.recipes[0]).to.have.property('totalIngredients');
+        expect(res.body.recipes[0]).to.have.property('numOfIngredientsHave');
       })
       .end(done);
   });
