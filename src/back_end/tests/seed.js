@@ -226,6 +226,11 @@ const recipes = [
         _id: ingredients[2]._id,
         quantity: 100,
         name: 'onion'
+      },
+      {
+        _id: ingredients[0]._id,
+        quantity: 200,
+        name: 'bacon'
       }
     ],
     cookingTime: 10,
