@@ -1,5 +1,7 @@
 const { app } = require('./../server/server');
 
+const path = require('path');
+
 const { addIngredientName } = require('./../routers/api_router');
 
 const { ObjectID } = require('mongodb');
@@ -356,7 +358,8 @@ describe('POST /recipe', () => {
 
     request(app)
       .post('/api/recipe')
-      .send(recipe)
+      .field('recipe', JSON.stringify(recipe))
+      .attach('image', path.resolve(__dirname, '..', 'images', 'LeeJongSuk.jpg'))
       .expect(200)
       .expect((res) => {
         expect(res.body.recipe.name).to.equal(recipe.name);
