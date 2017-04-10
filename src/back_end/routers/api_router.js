@@ -1,5 +1,5 @@
 const express = require('express');
-const formidable = require('express-formidable');
+const formidable = require('formidable');
 const cloudinary = require('cloudinary');
 const path = require('path');
 
@@ -13,10 +13,24 @@ const { ObjectID } = require('mongodb');
 const router = express.Router();
 
 
-router.use(formidable({
-  uploadDir: path.resolve(__dirname, '..', 'images'),
-  keepExtensions: true
-}));
+// router.use(formidable({
+//   uploadDir: path.resolve(__dirname, '..', 'images'),
+//   keepExtensions: true
+// }));
+
+router.use((req, res, next) => {
+  let form = formidable.IncomingForm();
+  form.uploadDir = path.resolve(__dirname, '..', 'images');
+  form.keepExtensions = true;
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      return res.status(400).send();
+    }
+    req.fields = fields;
+    req.files = files;
+    next();
+  });
+});
 
 cloudinary.config({
   cloud_name: 'dicyn7jds',
@@ -34,63 +48,6 @@ router.get('/recipes', (req, res) => {
   }).catch((err) => {
     res.status(400).send();
   });
-});
-
-router.get('/recipe/:id', (req, res) => {
-  const id = req.params.id;
-
-  Recipe.findOne({ _id: id }).then((recipe) => {
-    if (!recipe) {
-      return res.status(404).send();
-    }
-    res.send({ recipe });
-  }).catch((err) => {
-    res.status(400).send();
-  });
-});
-
-router.post('/recipe/:id/increaseLike', (req, res) => {
-  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfLikes: 1 } }, { new: true })
-    .then((recipe) => {
-      if (!recipe) {
-        return res.status(404).send();
-      }
-      res.send({ recipe });
-    })
-    .catch(err => res.status(400).send(err));
-});
-
-router.post('/recipe/:id/decreaseLike', (req, res) => {
-  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfLikes: -1 } }, { new: true })
-    .then((recipe) => {
-      if (!recipe) {
-        return res.status(404).send();
-      }
-      res.send({ recipe });
-    })
-    .catch(err => res.status(400).send());
-});
-
-router.post('/recipe/:id/increaseDislike', (req, res) => {
-  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfDislikes: 1 } }, { new: true })
-    .then((recipe) => {
-      if (!recipe) {
-        return res.status(404).send();
-      }
-      res.send({ recipe });
-    })
-    .catch(err => res.status(400).send());
-});
-
-router.post('/recipe/:id/decreaseDislike', (req, res) => {
-  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfDislikes: -1 } }, { new: true })
-    .then((recipe) => {
-      if (!recipe) {
-        return res.status(404).send();
-      }
-      res.send({ recipe });
-    })
-    .catch(err => res.status(400).send());
 });
 
 router.get('/recipe', (req, res) => {
@@ -123,11 +80,17 @@ router.get('/recipe', (req, res) => {
     .catch(err => res.status(400).send());
 });
 
-router.post('/images/upload', (req, res) => {
-  const localImagePath = files.image.path;
-  uploadImageToCDN(localImagePath)
-    .then(imageCDNInfo => res.send(imageCDNInfo))
-    .catch(err => res.status(400).send());
+router.get('/recipe/:id', (req, res) => {
+  const id = req.params.id;
+
+  Recipe.findOne({ _id: id }).then((recipe) => {
+    if (!recipe) {
+      return res.status(404).send();
+    }
+    res.send({ recipe });
+  }).catch((err) => {
+    res.status(400).send();
+  });
 });
 
 router.post('/recipe', (req, res) => {
@@ -199,6 +162,50 @@ function addIngredientName(ingredients) {
 
   return Promise.all(promiseQueues);
 }
+
+router.post('/recipe/:id/increaseLike', (req, res) => {
+  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfLikes: 1 } }, { new: true })
+    .then((recipe) => {
+      if (!recipe) {
+        return res.status(404).send();
+      }
+      res.send({ recipe });
+    })
+    .catch(err => res.status(400).send(err));
+});
+
+router.post('/recipe/:id/decreaseLike', (req, res) => {
+  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfLikes: -1 } }, { new: true })
+    .then((recipe) => {
+      if (!recipe) {
+        return res.status(404).send();
+      }
+      res.send({ recipe });
+    })
+    .catch(err => res.status(400).send());
+});
+
+router.post('/recipe/:id/increaseDislike', (req, res) => {
+  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfDislikes: 1 } }, { new: true })
+    .then((recipe) => {
+      if (!recipe) {
+        return res.status(404).send();
+      }
+      res.send({ recipe });
+    })
+    .catch(err => res.status(400).send());
+});
+
+router.post('/recipe/:id/decreaseDislike', (req, res) => {
+  Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfDislikes: -1 } }, { new: true })
+    .then((recipe) => {
+      if (!recipe) {
+        return res.status(404).send();
+      }
+      res.send({ recipe });
+    })
+    .catch(err => res.status(400).send());
+});
 
 router.get('/ingredients', (req, res) => {
   Ingredient.find({}).then((ingredients) => {

@@ -27,6 +27,7 @@
     "cloudinary": "^1.8.0",
     "express": "^4.15.2",
     "express-formidable": "^1.0.0",
+    "formidable": "^1.1.1",
     "jquery": "^3.2.1",
     "jsonwebtoken": "^7.3.0",
     "lodash": "^4.17.4",
