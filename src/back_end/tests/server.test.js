@@ -271,6 +271,7 @@ describe('GET /recipe?ingredients=', () => {
         expect(res.body.recipes).to.have.length(3);
         expect(res.body.recipes[0]).to.have.property('totalIngredients');
         expect(res.body.recipes[0]).to.have.property('numOfIngredientsHave');
+        expect(res.body.recipes[0]).to.have.property('numOfIngredientsMissing');
       })
       .end(done);
   });
@@ -289,6 +290,86 @@ describe('GET /recipe?ingredients=', () => {
       .get('/api/recipe?test=5')
       .expect(400)
       .end(done);
+  });
+
+  it('should return a list of recipes with valid ingredients query and sorting according to popularity', (done) => {
+    const ingredients = ['eggs', 'onion'];
+
+    request(app)
+      .get(`/api/recipe?ingredients=${ingredients}&sort=numOfLikes`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.recipes).to.have.length(3);
+        expect(res.body.recipes[0]).to.have.property('totalIngredients');
+        expect(res.body.recipes[0]).to.have.property('numOfIngredientsHave');
+        expect(res.body.recipes[0]).to.have.property('numOfIngredientsMissing');
+        expect(res.body.recipes[0].numOfLikes).to.equal(recipes[4].numOfLikes);
+      })
+      .end(done);
+  });
+
+  it('should return a list of recipes with valid ingredients query and sorting according to numOfIngredientsMissing', (done) => {
+    const ingredients = ['eggs', 'onion'];
+
+    request(app)
+      .get(`/api/recipe?ingredients=${ingredients}&sort=numOfIngredientsMissing`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.recipes).to.have.length(3);
+        expect(res.body.recipes[0]).to.have.property('totalIngredients');
+        expect(res.body.recipes[0]).to.have.property('numOfIngredientsHave');
+        expect(res.body.recipes[0]).to.have.property('numOfIngredientsMissing');
+        expect(res.body.recipes[0].numOfIngredientsMissing).to.equal(0);
+      })
+      .end(done);
+  });
+});
+
+describe('POST /recipe', () => {
+  it('should return an inserted recipe', (done) => {
+    const recipe = {
+      name: 'Test Recipe',
+      description: 'Very good recipe',
+      cookingTime: 50,
+      image: {
+        _id: '123',
+        versionId: '456',
+        imageType: 'jpg'
+      },
+      numOfMeals: 3,
+      instructions: [
+        'First instruction',
+        'Second instruction',
+        'Third instruction'
+      ],
+      ingredients: [
+        {
+          _id: ingredients[0]._id,
+          quantity: 100
+        },
+        {
+          _id: ingredients[1]._id,
+          quantity: 50
+        }
+      ]
+    };
+
+    request(app)
+      .post('/api/recipe')
+      .send(recipe)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.recipe.name).to.equal(recipe.name);
+      })
+      .end((err, res) => {
+        Recipe.findById(res.body.recipe._id).then((recipeFromDb) => {
+          expect(recipeFromDb).to.exist;
+          expect(recipeFromDb.name).to.equal(recipe.name);
+          done();
+        }).catch((err) => {
+          return done(err);
+        });
+      });
   });
 });
 
