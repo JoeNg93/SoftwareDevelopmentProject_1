@@ -130,6 +130,50 @@ router.post('/images/upload', (req, res) => {
     .catch(err => res.status(400).send());
 });
 
+router.post('/recipe', (req, res) => {
+  const { fields, files } = req;
+
+  let recipe = null;
+
+  const localImagePath = files.image.path;
+  uploadImageToCDN(localImagePath)
+    .then((imageCDNInfo) => {
+      recipe = JSON.parse(fields.recipe);
+      recipe.image = imageCDNInfo;
+      const ingredients = recipe.ingredients;
+      return addIngredientName(ingredients);
+    })
+    .then((ingredientsWithName) => {
+      Object.assign(recipe, { ingredients: ingredientsWithName });
+      recipe = new Recipe(recipe);
+      return recipe.save();
+    })
+    .then(doc => {
+      res.send({ recipe: doc })
+    })
+    .catch(err => res.status(400).send());
+  
+  // let recipe = {
+  //   name: fields.name,
+  //   cookingTime: fields.cookingTime || 0,
+  //   image: fields.image,
+  //   numOfMeals: fields.numOfMeals || 1,
+  //   instructions: fields.instructions || [],
+  //   description: fields.description
+  // };
+  //
+  // const ingredients = fields.ingredients;
+  // addIngredientName(ingredients)
+  //   .then((ingredientsWithName) => {
+  //     Object.assign(recipe, { ingredients: ingredientsWithName });
+  //     recipe = new Recipe(recipe);
+  //     return recipe.save();
+  //   })
+  //   .then(doc => res.send({ recipe: doc }))
+  //   .catch(err => res.status(400).send());
+
+});
+
 function uploadImageToCDN(localImagePath) {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(localImagePath, function handleResponse(response) {
@@ -145,30 +189,6 @@ function uploadImageToCDN(localImagePath) {
     });
   });
 }
-
-router.post('/recipe', (req, res) => {
-  const { fields } = req;
-
-  let recipe = {
-    name: fields.name,
-    cookingTime: fields.cookingTime || 0,
-    image: fields.image,
-    numOfMeals: fields.numOfMeals || 1,
-    instructions: fields.instructions || [],
-    description: fields.description
-  };
-
-  const ingredients = fields.ingredients;
-  addIngredientName(ingredients)
-    .then((ingredientsWithName) => {
-      Object.assign(recipe, { ingredients: ingredientsWithName });
-      recipe = new Recipe(recipe);
-      return recipe.save();
-    })
-    .then(doc => res.send({ recipe: doc }))
-    .catch(err => res.status(400).send());
-
-});
 
 function addIngredientName(ingredients) {
   const promiseQueues = [];
