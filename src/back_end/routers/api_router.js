@@ -144,7 +144,7 @@ router.post('/recipe', (req, res) => {
       return addIngredientName(ingredients);
     })
     .then((ingredientsWithName) => {
-      Object.assign(recipe, { ingredients: ingredientsWithName });
+      recipe = Object.assign({}, recipe, { ingredients: ingredientsWithName });
       recipe = new Recipe(recipe);
       return recipe.save();
     })

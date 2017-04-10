@@ -342,11 +342,11 @@ describe('POST /recipe', () => {
       ingredients: [
         {
           _id: ingredients[0]._id,
-          quantity: 100
+          quantity: "100"
         },
         {
           _id: ingredients[1]._id,
-          quantity: 50
+          quantity: "50"
         }
       ]
     };
