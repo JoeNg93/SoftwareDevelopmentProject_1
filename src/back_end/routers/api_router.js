@@ -41,7 +41,7 @@ router.get('/recipe/:id', (req, res) => {
 
   Recipe.findOne({ _id: id }).then((recipe) => {
     if (!recipe) {
-      res.status(404).send();
+      return res.status(404).send();
     }
     res.send({ recipe });
   }).catch((err) => {
@@ -53,7 +53,7 @@ router.post('/recipe/:id/increaseLike', (req, res) => {
   Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfLikes: 1 } }, { new: true })
     .then((recipe) => {
       if (!recipe) {
-        res.status(404).send();
+        return res.status(404).send();
       }
       res.send({ recipe });
     })
@@ -64,7 +64,7 @@ router.post('/recipe/:id/decreaseLike', (req, res) => {
   Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfLikes: -1 } }, { new: true })
     .then((recipe) => {
       if (!recipe) {
-        res.status(404).send();
+        return res.status(404).send();
       }
       res.send({ recipe });
     })
@@ -75,7 +75,7 @@ router.post('/recipe/:id/increaseDislike', (req, res) => {
   Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfDislikes: 1 } }, { new: true })
     .then((recipe) => {
       if (!recipe) {
-        res.status(404).send();
+        return res.status(404).send();
       }
       res.send({ recipe });
     })
@@ -86,7 +86,7 @@ router.post('/recipe/:id/decreaseDislike', (req, res) => {
   Recipe.findByIdAndUpdate(req.params.id, { $inc: { numOfDislikes: -1 } }, { new: true })
     .then((recipe) => {
       if (!recipe) {
-        res.status(404).send();
+        return res.status(404).send();
       }
       res.send({ recipe });
     })
@@ -95,7 +95,7 @@ router.post('/recipe/:id/decreaseDislike', (req, res) => {
 
 router.get('/recipe', (req, res) => {
   if (req.query.ingredients === undefined) {
-    res.status(400).send();
+    return res.status(400).send();
   }
 
   const sortKey = req.query.sort || '';
@@ -107,7 +107,7 @@ router.get('/recipe', (req, res) => {
   Recipe.findByIngredients(ingredients, sortKey, sortOrder)
     .then((recipes) => {
       if (recipes.length == 0) {
-        res.status(404).send();
+        return res.status(404).send();
       }
       let promiseQueues = recipes.map((recipe) => {
         return new Promise((resolve, reject) => {
@@ -120,7 +120,7 @@ router.get('/recipe', (req, res) => {
       return Promise.all(promiseQueues);
     })
     .then((recipes) => res.send({ recipes }))
-    .catch(err => res.status(400).send(err));
+    .catch(err => res.status(400).send());
 });
 
 router.post('/images/upload', (req, res) => {
@@ -148,11 +148,9 @@ router.post('/recipe', (req, res) => {
       recipe = new Recipe(recipe);
       return recipe.save();
     })
-    .then(doc => {
-      res.send({ recipe: doc })
-    })
+    .then(doc => res.send({ recipe: doc }))
     .catch(err => res.status(400).send());
-  
+
   // let recipe = {
   //   name: fields.name,
   //   cookingTime: fields.cookingTime || 0,
@@ -203,7 +201,7 @@ function addIngredientName(ingredients) {
 }
 
 router.get('/ingredients', (req, res) => {
-  Ingredient.find().then((ingredients) => {
+  Ingredient.find({}).then((ingredients) => {
     res.send({ ingredients });
   }).catch((err) => {
     res.status(400).send();
@@ -215,7 +213,7 @@ router.get('/ingredient/:id', (req, res) => {
 
   Ingredient.findOne({ _id: id }).then((ingredient) => {
     if (!ingredient) {
-      res.status(404).send();
+      return res.status(404).send();
     }
     res.send({ ingredient });
   }).catch((err) => {
@@ -228,12 +226,12 @@ router.post('/ingredient', (req, res) => {
   const categoryID = fields.categoryID;
 
   if (!ObjectID.isValid(categoryID)) {
-    res.status(400).send();
+    return res.status(400).send();
   }
 
   Category.findOne({ _id: categoryID }).then((category) => {
     if (!category) {
-      res.status(404).send();
+      return res.status(404).send();
     }
     const ingredient = new Ingredient({
       name: fields.name,
@@ -262,7 +260,7 @@ router.get('/category/:id', (req, res) => {
 
   Category.findOne({ _id: id }).then((category) => {
     if (!category) {
-      res.status(404).send();
+      return res.status(404).send();
     }
     res.send({ category });
   }).catch((err) => {
@@ -275,12 +273,12 @@ router.get('/category/:id/ingredients', (req, res) => {
 
   Category.findOne({ _id: id }).then((category) => {
     if (!category) {
-      res.status(404).send();
+      return res.status(404).send();
     }
     return Ingredient.find({ categoryID: category._id.toHexString() });
   }).then((ingredients) => {
     if (ingredients.length == 0) {
-      res.status(404).send();
+      return res.status(404).send();
     }
     res.send({ ingredients });
   }).catch((err) => {
