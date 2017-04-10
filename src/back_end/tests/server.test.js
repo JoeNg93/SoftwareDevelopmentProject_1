@@ -333,11 +333,6 @@ describe('POST /recipe', () => {
       name: 'Test Recipe',
       description: 'Very good recipe',
       cookingTime: 50,
-      image: {
-        _id: '123',
-        versionId: '456',
-        imageType: 'jpg'
-      },
       numOfMeals: 3,
       instructions: [
         'First instruction',
