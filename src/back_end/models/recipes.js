@@ -27,7 +27,16 @@ const RecipeSchema = new mongoose.Schema({
   numOfDislikes: Number
 });
 
-RecipeSchema.statics.findByIngredients = function (ingredients) {
+RecipeSchema.statics.findByIngredients = function (ingredients, sortKey, sortOrder) {
+  if (sortKey) {
+    return Recipe.find({
+      ingredients: {
+        $elemMatch: {
+          name: { $in: ingredients }
+        }
+      }
+    }).sort({ [sortKey]: sortOrder });
+  }
   return Recipe.find({
     ingredients: {
       $elemMatch: {

@@ -98,9 +98,13 @@ router.get('/recipe', (req, res) => {
     res.status(400).send();
   }
 
+  const sortKey = req.query.sort || '';
+
+  const sortOrder = req.query.sort === 'numOfIngredientsMissing' ? 1 : -1;
+
   const ingredients = req.query.ingredients.split(",").map(ingredient => ingredient.trim());
 
-  Recipe.findByIngredients(ingredients)
+  Recipe.findByIngredients(ingredients, sortKey, sortOrder)
     .then((recipes) => {
       if (recipes.length == 0) {
         res.status(404).send();
@@ -109,7 +113,8 @@ router.get('/recipe', (req, res) => {
         return new Promise((resolve, reject) => {
           const totalIngredients = recipe.ingredients.length;
           const numOfIngredientsHave = recipe.ingredients.filter(ingredient => ingredients.indexOf(ingredient.name) != -1).length;
-          resolve(Object.assign({}, recipe._doc, { totalIngredients, numOfIngredientsHave }));
+          const numOfIngredientsMissing = totalIngredients - numOfIngredientsHave;
+          resolve(Object.assign({}, recipe._doc, { totalIngredients, numOfIngredientsHave, numOfIngredientsMissing }));
         });
       });
       return Promise.all(promiseQueues);
@@ -149,7 +154,8 @@ router.post('/recipe', (req, res) => {
     cookingTime: fields.cookingTime || 0,
     image: fields.image,
     numOfMeals: fields.numOfMeals || 1,
-    instructions: fields.instructions || []
+    instructions: fields.instructions || [],
+    description: fields.description
   };
 
   const ingredients = fields.ingredients;
