@@ -5,6 +5,10 @@ const { Ingredient } = require('./../models/ingredients');
 const { Recipe } = require('./../models/recipes');
 const { User } = require('./../models/users');
 
+const bcrypt = require('bcryptjs');
+
+const salt = bcrypt.genSaltSync(10);
+
 const categories = [
   {
     _id: new ObjectID(),
@@ -31,8 +35,6 @@ const categories = [
     name: 'fuck'
   }
 ];
-
-const users = [];
 
 const ingredients = [
   {
@@ -248,6 +250,59 @@ const recipes = [
   }
 ];
 
+const users = [
+  {
+    _id: new ObjectID(),
+    email: 'ntuandungzz@gmail.com',
+    password: bcrypt.hashSync('test1', salt),
+    favoriteRecipes: [
+      {
+        _id: recipes[0]._id,
+        name: recipes[0].name
+      },
+      {
+        _id: recipes[1]._id,
+        name: recipes[1].name
+      }
+    ],
+    ingredients: [
+      {
+        _id: ingredients[0]._id,
+        name: ingredients[0].name
+      },
+      {
+        _id: ingredients[1]._id,
+        name: ingredients[1].name
+      }
+    ]
+  },
+  {
+    _id: new ObjectID(),
+    email: 'tdungnguyenaa@gmail.com',
+    password: bcrypt.hashSync('test2', salt),
+    favoriteRecipes: [
+      {
+        _id: recipes[2]._id,
+        name: recipes[2].name
+      },
+      {
+        _id: recipes[3]._id,
+        name: recipes[3].name
+      }
+    ],
+    ingredients: [
+      {
+        _id: ingredients[2]._id,
+        name: ingredients[2].name
+      },
+      {
+        _id: ingredients[3]._id,
+        name: ingredients[3].name
+      }
+    ]
+  }
+];
+
 const populateRecipes = (done) => {
   Recipe.remove({}).then(() => {
     return Recipe.insertMany(recipes);
@@ -267,7 +322,9 @@ const populateCategories = (done) => {
 };
 
 const populateUsers = (done) => {
-
+  User.remove({}).then(() => {
+    return User.insertMany(users);
+  }).then(() => done());
 };
 
 module.exports = {
