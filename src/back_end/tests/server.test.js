@@ -14,12 +14,17 @@ const { recipes, ingredients, users, categories }  = require('./seed');
 const { Category } = require('./../models/categories');
 const { Ingredient } = require('./../models/ingredients');
 const { Recipe } = require('./../models/recipes');
+const { User } = require('./../models/users');
 
 const { populateCategories, populateIngredients, populateRecipes, populateUsers } = require('./seed');
 
 beforeEach(populateCategories);
 beforeEach(populateIngredients);
 beforeEach(populateRecipes);
+beforeEach(populateUsers);
+
+// --------------------------------------------------
+// CATEGORY TEST
 
 describe('GET /categories', () => {
   it('should get the list of categories', (done) => {
@@ -134,6 +139,9 @@ describe('POST /category', () => {
   });
 });
 
+// --------------------------------------------------
+// INGREDIENT TEST
+
 describe('GET /ingredients', () => {
   it('should return a list of ingredients', (done) => {
     request(app)
@@ -223,6 +231,9 @@ describe('POST /ingredient', () => {
       .end(done);
   });
 });
+
+// --------------------------------------------------
+// RECIPE TEST
 
 describe('GET /recipes', () => {
   it('should return a list of recipes', (done) => {
@@ -327,49 +338,51 @@ describe('GET /recipe?ingredients=', () => {
   });
 });
 
-describe('POST /recipe', () => {
-  it('should return an inserted recipe', (done) => {
-    const recipe = {
-      name: 'Test Recipe',
-      description: 'Very good recipe',
-      cookingTime: 50,
-      numOfMeals: 3,
-      instructions: [
-        'First instruction',
-        'Second instruction',
-        'Third instruction'
-      ],
-      ingredients: [
-        {
-          _id: ingredients[0]._id,
-          quantity: "100"
-        },
-        {
-          _id: ingredients[1]._id,
-          quantity: "50"
-        }
-      ]
-    };
-
-    request(app)
-      .post('/api/recipe')
-      .field('recipe', JSON.stringify(recipe))
-      .attach('image', path.resolve(__dirname, '..', 'images', 'LeeJongSuk.jpg'))
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.recipe.name).to.equal(recipe.name);
-      })
-      .end((err, res) => {
-        Recipe.findById(res.body.recipe._id).then((recipeFromDb) => {
-          expect(recipeFromDb).to.exist;
-          expect(recipeFromDb.name).to.equal(recipe.name);
-          done();
-        }).catch((err) => {
-          return done(err);
-        });
-      });
-  });
-});
+// describe('POST /recipe', () => {
+//   it('should return an inserted recipe', (done) => {
+//     const recipe = {
+//       name: 'Test Recipe',
+//       description: 'Very good recipe',
+//       cookingTime: 50,
+//       numOfMeals: 3,
+//       instructions: [
+//         'First instruction',
+//         'Second instruction',
+//         'Third instruction'
+//       ],
+//       ingredients: [
+//         {
+//           _id: ingredients[0]._id,
+//           quantity: "100"
+//         },
+//         {
+//           _id: ingredients[1]._id,
+//           quantity: "50"
+//         }
+//       ]
+//     };
+//
+//     console.log(JSON.stringify(recipe));
+//
+//     request(app)
+//       .post('/api/recipe')
+//       .field('recipe', JSON.stringify(recipe))
+//       .attach('image', path.resolve(__dirname, '..', 'images', 'LeeJongSuk.jpg'))
+//       .expect(200)
+//       .expect((res) => {
+//         expect(res.body.recipe.name).to.equal(recipe.name);
+//       })
+//       .end((err, res) => {
+//         Recipe.findById(res.body.recipe._id).then((recipeFromDb) => {
+//           expect(recipeFromDb).to.exist;
+//           expect(recipeFromDb.name).to.equal(recipe.name);
+//           done();
+//         }).catch((err) => {
+//           return done(err);
+//         });
+//       });
+//   });
+// });
 
 describe('POST /recipe/:id/increaseLike', () => {
   it('should increase numOfLikes by 1 with valid id', (done) => {
@@ -470,6 +483,239 @@ describe('POST /recipe/:id/decreaseDislike', () => {
   it('should return 400 if id is not valid', (done) => {
     request(app)
       .post(`/api/recipe/125$!/decreaseDislike`)
+      .expect(400)
+      .end(done);
+  });
+});
+
+// --------------------------------------------------
+// USER TEST
+
+describe('GET /users', () => {
+  it('should return a list of users', (done) => {
+    request(app)
+      .get('/api/users')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.users).to.have.length(users.length);
+        expect(res.body.users[0]).to.have.property('email');
+        expect(res.body.users[0]).to.have.property('favoriteRecipes');
+        expect(res.body.users[0]).to.have.property('ingredients');
+        expect(res.body.users[0]).to.not.have.property('password');
+      })
+      .end(done);
+  });
+});
+
+describe('GET /user/:id/favoriteRecipes', () => {
+  it('should return favorite recipes with valid user id', (done) => {
+    request(app)
+      .get(`/api/user/${users[0]._id}/favoriteRecipes`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.favoriteRecipes).to.have.length(users[0].favoriteRecipes.length);
+      })
+      .end(done);
+  });
+
+  it('should return 404 if id is not found', (done) => {
+    request(app)
+      .get(`/api/user/${new ObjectID()}/favoriteRecipes`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 400 if id is not valid', (done) => {
+    request(app)
+      .get('/api/user/124@$/favoriteRecipes')
+      .expect(400)
+      .end(done);
+  });
+});
+
+describe('GET /user/:id/ingredients', () => {
+  it('should return a list of ingredients with valid id', (done) => {
+    request(app)
+      .get(`/api/user/${users[0]._id}/ingredients`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.ingredients).to.have.length(users[0].ingredients.length);
+      })
+      .end(done);
+  });
+
+  it('should return 404 if id is not found', (done) => {
+    request(app)
+      .get(`/api/user/${new ObjectID()}/ingredients`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 400 if id is not valid', (done) => {
+    request(app)
+      .get('/api/user/1255@/ingredients')
+      .expect(400)
+      .end(done);
+  });
+});
+
+describe('POST /user/:id/favoriteRecipe', () => {
+  it('should return an inserted favorite recipe', (done) => {
+    const recipe = {
+      _id: recipes[2]._id,
+      name: recipes[2].name
+    };
+    request(app)
+      .post(`/api/user/${users[0]._id}/favoriteRecipe`)
+      .send(recipe)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.user.favoriteRecipes).to.have.length(3);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        User.findById(res.body.user._id)
+          .then((user) => {
+            if (!user) {
+              return done('User not found');
+            }
+            expect(user.favoriteRecipes).to.have.length(3);
+            done();
+          })
+          .catch(err => done(err));
+      });
+  });
+
+  it('should return 400 if id is invalid', (done) => {
+    const recipe = {
+      _id: recipes[2]._id,
+      name: recipes[2].name
+    };
+
+    request(app)
+      .post(`/api/user/125z/favoriteRecipe`)
+      .send(recipe)
+      .expect(400)
+      .end(done);
+  });
+
+  it('should return 404 if id is not found', (done) => {
+    const recipe = {
+      _id: recipes[2]._id,
+      name: recipes[2].name
+    };
+
+    request(app)
+      .post(`/api/user/${new ObjectID()}/favoriteRecipe`)
+      .send(recipe)
+      .expect(404)
+      .end(done);
+  });
+});
+
+describe('POST /user/:id/ingredient', () => {
+  it('should return an inserted ingredient', (done) => {
+    const ingredient = {
+      _id: ingredients[2]._id,
+      name: ingredients[2].name
+    };
+
+    request(app)
+      .post(`/api/user/${users[0]._id}/ingredient`)
+      .send(ingredient)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.user.ingredients).to.have.length(3);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        User.findById(res.body.user._id)
+          .then((user) => {
+            if (!user) {
+              return done('Id not found');
+            }
+            expect(user.ingredients).to.have.length(3);
+            done();
+          })
+          .catch(err => done(err));
+      })
+  });
+
+  it('should return 400 if id is invalid', (done) => {
+    const ingredient = {
+      _id: ingredients[2]._id,
+      name: ingredients[2].name
+    };
+
+    request(app)
+      .post('/api/user/124z/ingredient')
+      .send(ingredient)
+      .expect(400)
+      .end(done);
+  });
+
+  it('should return 404 if id is not found', (done) => {
+    const ingredient = {
+      _id: ingredients[2]._id,
+      name: ingredients[2].name
+    };
+
+    request(app)
+      .post(`/api/user/${new ObjectID()}/ingredient`)
+      .send(ingredient)
+      .expect(404)
+      .end(done);
+  });
+});
+
+describe('POST /user/v1', () => {
+  it('should return a registered user', (done) => {
+    const userData = {
+      email: 'testtxxxt@gmail.com',
+      password: '123hihi'
+    };
+
+    request(app)
+      .post(`/api/user/v1`)
+      .send(userData)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.user.email).to.equal(userData.email);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        User.findById(res.body.user._id)
+          .then((user) => {
+            if (!user) {
+              return done('Id not found');
+            }
+
+            expect(user.email).to.equal(res.body.user.email);
+            expect(user.password).to.not.equal(userData.password);
+            done();
+          })
+          .catch(err => done(err));
+      });
+  });
+
+  it('should return 400 if email is not valid', (done) => {
+    const userData = {
+      email: 'joo',
+      password: 'ahihi'
+    };
+
+    request(app)
+      .post(`/api/user/v1`)
+      .send(userData)
       .expect(400)
       .end(done);
   });
