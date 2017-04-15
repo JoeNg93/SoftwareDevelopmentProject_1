@@ -1,7 +1,10 @@
 const express = require('express');
-const formidable = require('formidable');
 const cloudinary = require('cloudinary');
 const path = require('path');
+const _ = require('lodash/fp');
+const Mailgun = require('mailgun-js');
+const MailComposer = require('nodemailer/lib/mail-composer');
+const ejs = require('ejs');
 
 const { Category } = require('./../models/categories');
 const { Ingredient } = require('./../models/ingredients');
@@ -10,27 +13,12 @@ const { User } = require('./../models/users');
 
 const { ObjectID } = require('mongodb');
 
+const { MAILGUN_API_KEY } = require('./../config/keyConfig');
+const mailgun = new Mailgun({ apiKey: MAILGUN_API_KEY, domain: 'mail.joehub.fi' });
+
+const { encrypt } = require('./../utils/auth');
+
 const router = express.Router();
-
-
-// router.use(formidable({
-//   uploadDir: path.resolve(__dirname, '..', 'images'),
-//   keepExtensions: true
-// }));
-
-router.use((req, res, next) => {
-  let form = formidable.IncomingForm();
-  form.uploadDir = path.resolve(__dirname, '..', 'images');
-  form.keepExtensions = true;
-  form.parse(req, (err, fields, files) => {
-    if (err) {
-      return res.status(400).send();
-    }
-    req.fields = fields;
-    req.files = files;
-    next();
-  });
-});
 
 cloudinary.config({
   cloud_name: 'dicyn7jds',
@@ -41,6 +29,9 @@ cloudinary.config({
 router.get('/', (req, res) => {
   res.send('API is working');
 });
+
+// --------------------------------------------------
+// RECIPE ROUTES
 
 router.get('/recipes', (req, res) => {
   Recipe.find().then((recipes) => {
@@ -207,6 +198,9 @@ router.post('/recipe/:id/decreaseDislike', (req, res) => {
     .catch(err => res.status(400).send());
 });
 
+// --------------------------------------------------
+// INGREDIENT ROUTES
+
 router.get('/ingredients', (req, res) => {
   Ingredient.find({}).then((ingredients) => {
     res.send({ ingredients });
@@ -253,6 +247,9 @@ router.post('/ingredient', (req, res) => {
   });
 
 });
+
+// --------------------------------------------------
+// CATEGORY ROUTES
 
 router.get('/categories', (req, res) => {
   Category.find().then((categories) => {
@@ -306,7 +303,152 @@ router.post('/category', (req, res) => {
   });
 });
 
+// --------------------------------------------------
+// USER ROUTES
+
+function getUserPropertyForResponse(user) {
+  return _.pick(['_id', 'email', 'favoriteRecipes', 'ingredients'])(user);
+}
+
+router.get('/users', (req, res) => {
+  User.find({})
+    .then((users) => {
+      const usersReturn = users.map(user => getUserPropertyForResponse(user));
+      res.send({ users: usersReturn });
+    })
+    .catch(err => res.status(400).send());
+});
+
+router.get('/user/:id/favoriteRecipes', (req, res) => {
+  const userId = req.params.id;
+
+  if (!ObjectID.isValid(userId)) {
+    return res.status(400).send();
+  }
+
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send();
+      }
+      res.send({ favoriteRecipes: user.favoriteRecipes });
+    })
+    .catch(err => res.status(400).send());
+});
+
+router.get('/user/:id/ingredients', (req, res) => {
+  const userId = req.params.id;
+
+  if (!ObjectID.isValid(userId)) {
+    return res.status(400).send();
+  }
+
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send();
+      }
+      res.send({ ingredients: user.ingredients });
+    })
+    .catch(err => res.status(400).send());
+});
+
+router.post('/user/:id/favoriteRecipe', (req, res) => {
+  const userId = req.params.id;
+
+  if (!ObjectID.isValid(userId)) {
+    return res.status(400).send();
+  }
+
+  const fields = req.fields;
+  const recipe = {
+    _id: fields._id,
+    name: fields.name
+  };
+
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send();
+      }
+      user.favoriteRecipes.push(recipe);
+      return user.save();
+    })
+    .then(user => res.send({ user: getUserPropertyForResponse(user) }))
+    .catch(err => res.status(400).send());
+
+});
+
+router.post('/user/:id/ingredient', (req, res) => {
+  const userId = req.params.id;
+
+  if (!ObjectID.isValid(userId)) {
+    return res.status(400).send();
+  }
+
+  const fields = req.fields;
+  const ingredient = {
+    _id: fields._id,
+    name: fields.name
+  };
+
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send();
+      }
+      user.ingredients.push(ingredient);
+      return user.save();
+    })
+    .then(user => res.send({ user: getUserPropertyForResponse(user) }))
+    .catch(err => res.status(400).send());
+
+});
+
+router.post('/user/v1', (req, res) => {
+  const { email, password } = req.fields;
+  const user = new User({
+    email,
+    password
+  });
+
+  user.save()
+    .then(user => res.send({ user: getUserPropertyForResponse(user) }))
+    .catch(err => res.status(400).send());
+});
+
+router.post('/user/v2', (req, res) => {
+  const { email, password } = req.fields;
+  const key = encrypt(`${email},${password}`);
+  const hostName = 'http://localhost:8765';
+  const urlPath = `${hostName}/auth/validate?key=${key}`;
+  ejs.renderFile(path.resolve(__dirname, '..', 'utils', 'email_form.ejs'), { url: urlPath }, (err, renderedHtmlString) => {
+    const mail = new MailComposer({
+      from: 'varIngredient <joe@mail.joehub.fi>',
+      to: email,
+      subject: 'Verify your email asap, motherfucker!',
+      html: renderedHtmlString
+    });
+
+    mail.compile().build((err, message) => {
+      const dataToSend = {
+        to: email,
+        message: message.toString()
+      };
+
+      mailgun.messages().sendMime(dataToSend, (err, body) => {
+        if (err) {
+          return res.status(400).send(err);
+        }
+        res.send({ status: body });
+      });
+    });
+  });
+});
+
 module.exports = {
-  router,
-  addIngredientName
+  api_router: router,
+  addIngredientName,
+  getUserPropertyForResponse
 };
+
