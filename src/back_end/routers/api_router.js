@@ -27,7 +27,39 @@ cloudinary.config({
 });
 
 router.get('/', (req, res) => {
-  res.send('API is working');
+  res.send({
+    "apiPath": {
+      "Recipe": {
+        "GET /recipes": "Get all the recipes in db",
+        "GET /recipe?ingredients=..&sort=...": "Get recipes according to ingredients and sort those recipes depends on numOfLikes or numOfIngredientsMissing",
+        "GET /recipe/:id": "Get recipe according to its id",
+        "POST /recipe": "Submit a single recipe",
+        "POST /recipe/:id/increaseLike": "Increase numOfLikes of a recipe specified by its id by 1",
+        "POST /recipe/:id/decreaseLike": "Decrease numOfLikes of a recipe specified by its id by 1",
+        "POST /recipe/:id/increaseDislike": "Increase numOfDislikes of a recipe spcified by its id by 1",
+        "POST /recipe/:id/decreaseDislike": "Decrease numOfDislikes of a recipe specified by its id by 1"
+      },
+      "Ingredient": {
+        "GET /ingredients": "Get all the ingredients in db",
+        "GET /ingredient/:id": "Get an ingredient specified by its id",
+        "POST /ingredient": 'Submit a single ingredient. Fields: name, categoryID'
+      },
+      "Category": {
+        "GET /categories": "Get all the categories in db",
+        "GET /category/:id": "Get a category specified by its id",
+        "GET /category/:id/ingredients": "Get ingredients in a category specified by its id",
+        "POST /category": "POST a single category. Fields: name"
+      },
+      "User": {
+        "GET /users": "Get all users in db",
+        "GET /user/:id/favoriteRecipes": "Get favorite recipes of an user specified by its id",
+        "GET /user/:id/ingredients": "Get ingredients of an user specified by its id",
+        "POST /user/:id/favoriteRecipe": "Submit a single favorite recipe for an user with id. Fields: _id, name",
+        "POST /user/:id/ingredient": "Submit a single ingredient for an user with id. Fields: _id, name",
+        "POST /user/v2": "Register user info. Fields: email, password"
+      }
+    }
+  });
 });
 
 // --------------------------------------------------
