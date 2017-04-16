@@ -48,11 +48,11 @@ router.get('/recipe', (req, res) => {
 
   const sortKey = req.query.sort || '';
 
-  const sortOrder = req.query.sort === 'numOfIngredientsMissing' ? 1 : -1;
+  const sortOrder = sortKey === 'numOfIngredientsMissing' ? 1 : -1;
 
   const ingredients = req.query.ingredients.split(",").map(ingredient => ingredient.trim());
 
-  Recipe.findByIngredients(ingredients, sortKey, sortOrder)
+  Recipe.findByIngredients(ingredients)
     .then((recipes) => {
       if (recipes.length == 0) {
         return res.status(404).send();
@@ -67,7 +67,10 @@ router.get('/recipe', (req, res) => {
       });
       return Promise.all(promiseQueues);
     })
-    .then((recipes) => res.send({ recipes }))
+    .then((recipes) => {
+      const responseRecipes = _.sortBy(sortKey)(recipes);
+      res.send({ recipes: sortOrder == 1 ? responseRecipes : responseRecipes.reverse() });
+    })
     .catch(err => res.status(400).send());
 });
 
