@@ -57,6 +57,10 @@ router.get('/', (req, res) => {
         "POST /user/:id/favoriteRecipe": "Submit a single favorite recipe for an user with id. Fields: _id, name",
         "POST /user/:id/ingredient": "Submit a single ingredient for an user with id. Fields: _id, name",
         "POST /user/v2": "Register user info. Fields: email, password"
+      },
+      "Auth (use /auth instead of /api)": {
+        "POST /login": "Login. Fields: email, password",
+        "GET /logout": "Logout"
       }
     }
   });
