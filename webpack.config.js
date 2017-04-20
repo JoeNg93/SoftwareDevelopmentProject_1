@@ -18,5 +18,9 @@ module.exports = {
         loader: 'babel-loader'
       }
     ]
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, 'src', 'front_end'),
+    compress: true
   }
 };
