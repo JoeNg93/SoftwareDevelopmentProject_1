@@ -1,17 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import ReduxPromise from 'redux-promise';
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 
-import reducers from './../reducers/index';
+import { store } from './store';
 
 import App from './../components/app';
+import MainPage from './../components/main_page/index';
+import ResultPage from './../components/result_page/index';
+import UserPage from './../components/user_page/index';
+import RecipePage from './../components/recipe_page/index';
 
-const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+// const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
-    <App/>
+  <Provider store={store}>
+    <Router>
+      <div>
+        <Route exact path="/" component={MainPage} />
+        <Route path="/result" component={ResultPage} />
+        <Route path="/user" component={UserPage} />
+        <Route path="/recipe/:id" component={RecipePage} />
+      </div>
+    </Router>
+    {/*<RecipePage />*/}
   </Provider>
-, document.querySelector('.container'));
+  , document.querySelector('.bigContainer'));
