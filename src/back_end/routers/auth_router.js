@@ -13,17 +13,24 @@ const { getUserPropertyForResponse } = require('./api_router');
 
 
 router.post('/login', (req, res) => {
-  if (req.session.token) {
+  const token = req.session.token || req.get('Authorization');
+  if (token) {
     return res.status(400).send();
   }
 
   const { email, password } = req.fields;
 
+  const userData = {};
+
   User.findByCredentials(email, password)
-    .then(user => user.generateAuthToken())
+    .then(user => {
+      userData._id = user._id;
+      return user.generateAuthToken();
+    })
     .then((token) => {
       req.session.token = token;
-      res.send({ token });
+      userData.token = token;
+      res.send({ user: userData});
     })
     .catch(err => res.status(401).send());
 });
@@ -56,7 +63,7 @@ router.get('/validate', (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  const token = req.session.token;
+  const token = req.session.token || req.get('Authorization');
   if (!token) {
     return res.status(401).send();
   }
