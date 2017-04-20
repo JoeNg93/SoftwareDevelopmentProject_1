@@ -6,6 +6,7 @@ const sessions = require('client-sessions');
 const formidable = require('formidable');
 const Mailgun = require('mailgun-js');
 const MailComposer = require('nodemailer/lib/mail-composer');
+const cors = require('cors');
 
 const { SESSION_KEY } = require('./../config/keyConfig');
 
@@ -16,6 +17,8 @@ const { auth_router } = require('./../routers/auth_router');
 const app = express();
 
 app.set('port', 8765);
+
+app.use(cors());
 
 app.use(sessions({
   cookieName: 'session',
