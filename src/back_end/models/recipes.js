@@ -27,14 +27,14 @@ const RecipeSchema = new mongoose.Schema({
   numOfDislikes: Number
 });
 
-RecipeSchema.statics.findByIngredients = function (ingredients) {
+RecipeSchema.statics.findByIngredients = function (ingredients, skip, limit) {
   return Recipe.find({
     ingredients: {
       $elemMatch: {
         name: { $in: ingredients }
       }
     }
-  });
+  }).skip(skip).limit(limit);
 };
 
 const Recipe = mongoose.model('Recipe', RecipeSchema);

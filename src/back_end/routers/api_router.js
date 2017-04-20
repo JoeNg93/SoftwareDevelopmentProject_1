@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
     "apiPath": {
       "Recipe": {
         "GET /recipes": "Get all the recipes in db",
-        "GET /recipe?ingredients=..&sort=...": "Get recipes according to ingredients and sort those recipes depends on numOfLikes or numOfIngredientsMissing",
+        "GET /recipe?ingredients=..&sort=...&skip=...&limit=...": "Get recipes according to ingredients and sort those recipes depends on numOfLikes or numOfIngredientsMissing",
         "GET /recipe/:id": "Get recipe according to its id",
         "POST /recipe": "Submit a single recipe",
         "POST /recipe/:id/increaseLike": "Increase numOfLikes of a recipe specified by its id by 1",
@@ -70,8 +70,11 @@ router.get('/', (req, res) => {
 // RECIPE ROUTES
 
 router.get('/recipes', (req, res) => {
-  Recipe.find().then((recipes) => {
-    res.send({ recipes });
+  const sortKey = req.query.sort || '';
+  const limit = Number(req.query.limit) || 0;
+
+  Recipe.find().limit(limit).then((recipes) => {
+    res.send({ recipes: _.sortBy(sortKey)(recipes) });
   }).catch((err) => {
     res.status(400).send();
   });
@@ -84,14 +87,16 @@ router.get('/recipe', (req, res) => {
 
   const sortKey = req.query.sort || '';
 
-  const sortOrder = sortKey === 'numOfIngredientsMissing' ? 1 : -1;
+  const skip = Number(req.query.skip) || 0;
+
+  const limit = Number(req.query.limit) || 0;
 
   const ingredients = req.query.ingredients.split(",").map(ingredient => ingredient.trim());
 
-  Recipe.findByIngredients(ingredients)
+  Recipe.findByIngredients(ingredients, skip, limit)
     .then((recipes) => {
       if (recipes.length == 0) {
-        return res.status(404).send();
+        return res.send({ recipes: [] });
       }
       let promiseQueues = recipes.map((recipe) => {
         return new Promise((resolve, reject) => {
@@ -105,7 +110,7 @@ router.get('/recipe', (req, res) => {
     })
     .then((recipes) => {
       const responseRecipes = _.sortBy(sortKey)(recipes);
-      res.send({ recipes: sortOrder == 1 ? responseRecipes : responseRecipes.reverse() });
+      res.send({ recipes: sortKey === 'numOfLikes' ? responseRecipes.reverse() : responseRecipes });
     })
     .catch(err => res.status(400).send());
 });

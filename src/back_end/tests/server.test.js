@@ -289,12 +289,15 @@ describe('GET /recipe?ingredients=', () => {
       .end(done);
   });
 
-  it('should return 404 not found if the ingredients query is empty', (done) => {
+  it('should return empty array if the ingredients query is empty', (done) => {
     const ingredients = [];
 
     request(app)
       .get(`/api/recipe?ingredients=${ingredients}`)
-      .expect(404)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.recipes).to.have.length(0);
+      })
       .end(done);
   });
 
