@@ -140,7 +140,7 @@ const recipes = [
     ingredients: [
       {
         _id: ingredients[2]._id,
-        quantity: "100",
+        quantity: "100g",
         name: 'onion'
       }
     ],
@@ -169,7 +169,7 @@ const recipes = [
     ingredients: [
       {
         _id: ingredients[4]._id,
-        quantity: "6 eggs",
+        quantity: "6",
         name: 'eggs'
       }
     ],
@@ -195,12 +195,12 @@ const recipes = [
     ingredients: [
       {
         _id: ingredients[6]._id,
-        quantity: "100",
+        quantity: "100g",
         name: 'chive'
       },
       {
         _id: ingredients[8]._id,
-        quantity: "2",
+        quantity: "100ml",
         name: 'olive oil'
       }
     ],
@@ -226,12 +226,12 @@ const recipes = [
     ingredients: [
       {
         _id: ingredients[4]._id,
-        quantity: "3 eggs",
+        quantity: "3",
         name: 'eggs'
       },
       {
         _id: ingredients[2]._id,
-        quantity: "100",
+        quantity: "100g",
         name: 'onion'
       },
       {
