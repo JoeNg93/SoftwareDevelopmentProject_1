@@ -1,0 +1,44 @@
+import React, { Component } from 'react';
+import { Field, reduxForm } from 'redux-form';
+import { withRouter } from 'react-router-dom';
+
+import NavBar from './nav_bar';
+import LoginModal from './login_modal';
+import SignupModal from './signup_modal';
+import SideNav from './side_nav';
+import SearchRecipes from './search_recipes';
+import TopRecipes from './top_recipes';
+import Reviews from './reviews';
+import Contact from './contact';
+import Footer from './footer';
+
+class MainPage extends Component {
+  componentDidMount() {
+    $('select').material_select();
+    $('.button-collapse').sideNav();
+    $('.scrollspy').scrollSpy();
+    $('.modal').modal();
+  }
+
+  render() {
+    return (
+      <div>
+        <NavBar />
+        <div id="homePageHtml">
+          <LoginModal />
+          <SignupModal />
+          <SideNav />
+          <div id="content">
+            <SearchRecipes />
+            <TopRecipes />
+            <Reviews />
+            <Contact />
+            <Footer />
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default MainPage;
