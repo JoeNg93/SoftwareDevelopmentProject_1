@@ -14,6 +14,8 @@ const { api_router } = require('./../routers/api_router');
 
 const { auth_router } = require('./../routers/auth_router');
 
+const { webhook_router } = require('./../routers/webhook_router');
+
 const app = express();
 
 app.set('port', 8765);
@@ -21,10 +23,13 @@ app.set('port', 8765);
 app.use(cors());
 
 app.use(sessions({
-  cookieName: 'session',
+  cookieName: 'varIngredientSession',
   secret: SESSION_KEY,
   duration: 2 * 60 * 60 * 1000,
   activeDuration: 5 * 60 * 1000,
+  cookie: {
+    secure: false
+  }
 }));
 
 const formidableConfig = (req, res, next) => {
@@ -43,11 +48,14 @@ const formidableConfig = (req, res, next) => {
 
 app.use(formidableConfig);
 
-app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end', 'assets')));
+// app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end', 'assets')));
+app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end')));
 
 app.use('/api', api_router);
 
 app.use('/auth', auth_router);
+
+app.use('/webhook', webhook_router);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', '..', 'front_end', 'index.html'));
