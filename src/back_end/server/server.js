@@ -49,7 +49,7 @@ const formidableConfig = (req, res, next) => {
 app.use(formidableConfig);
 
 // app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end', 'assets')));
-app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end')));
+app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end', 'assets')));
 
 app.use('/api', api_router);
 

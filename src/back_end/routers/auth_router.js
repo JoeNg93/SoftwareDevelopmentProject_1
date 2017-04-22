@@ -11,24 +11,26 @@ const { JWT_KEY } = require('./../config/keyConfig');
 
 const { getUserPropertyForResponse } = require('./api_router');
 
+const _ = require ('lodash/fp');
+
 
 router.post('/login', (req, res) => {
-  const token = req.session.token || req.get('Authorization');
+  const token = req.varIngredientSession.token || req.get('Authorization');
   if (token) {
     return res.status(400).send();
   }
 
   const { email, password } = req.fields;
 
-  const userData = {};
+  let userData = {};
 
   User.findByCredentials(email, password)
     .then(user => {
-      userData._id = user._id;
+      userData = _.pick(['_id', 'ingredients', 'favoriteRecipes', 'isAdmin'])(user);
       return user.generateAuthToken();
     })
     .then((token) => {
-      req.session.token = token;
+      req.varIngredientSession.token = token;
       userData.token = token;
       res.send({ user: userData});
     })
@@ -53,8 +55,9 @@ router.get('/validate', (req, res) => {
       })
       .then(user => user.generateAuthToken())
       .then((token) => {
-        req.session.token = token;
-        res.send({ token });
+        req.varIngredientSession.token = token;
+        // res.send({ token });
+        res.redirect('/');
       })
       .catch(err => res.status(400).send({ status: 'fail', message: err.message }));
   } catch (e) {
@@ -63,17 +66,22 @@ router.get('/validate', (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  const token = req.session.token || req.get('Authorization');
+  const token = req.varIngredientSession.token || req.get('Authorization');
   if (!token) {
     return res.status(401).send();
   }
   User.findByToken(token)
     .then(user => user.removeAuthToken(token))
     .then(() => {
-      req.session.reset();
-      res.send({ status: 'success', message: 'Logout successfully' })
+      req.varIngredientSession.reset();
+      // res.send({ status: 'success', message: 'Logout successfully' })
+      res.redirect('/');
     })
     .catch(err => res.status(400).send(err.message));
+});
+
+router.get('/checkSession', (req, res) => {
+  res.send(req.varIngredientSession.token ? true : false);
 });
 
 module.exports = {

@@ -446,7 +446,6 @@ router.post('/user/:id/ingredient', (req, res) => {
     })
     .then(user => res.send({ user: getUserPropertyForResponse(user) }))
     .catch(err => res.status(400).send());
-
 });
 
 router.post('/user/v1', (req, res) => {
@@ -470,7 +469,7 @@ router.post('/user/v2', (req, res) => {
     const mail = new MailComposer({
       from: 'varIngredient <joe@mail.joehub.fi>',
       to: email,
-      subject: 'Verify your email asap, motherfucker!',
+      subject: 'Verify your email at varIngredient',
       html: renderedHtmlString
     });
 
@@ -482,9 +481,9 @@ router.post('/user/v2', (req, res) => {
 
       mailgun.messages().sendMime(dataToSend, (err, body) => {
         if (err) {
-          return res.status(400).send(err);
+          return res.status(400).send({ status: 'fail' });
         }
-        res.send({ status: body });
+        res.send({ status: 'success' });
       });
     });
   });
