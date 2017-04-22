@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 // const HOST_URL = 'https://var-ingredient.joehub.fi';
 const HOST_URL = 'http://localhost:8765';
@@ -36,6 +36,9 @@ export const GET_USER_ID_INGREDIENTS = 'GET_USER_ID_INGREDIENTS';
 export const POST_USER_ID_FAVORITE_RECIPE = 'POST_USER_ID_FAVORITE_RECIPE';
 export const POST_USER_ID_INGREDIENT = 'POST_USER_ID_INGREDIENT';
 export const POST_USER = 'POST_USER';
+export const CHECK_SESSION_KEY = 'CHECK_SESSION_KEY';
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
 
 // RECIPE ACTIONS
 export function getRecipes() {
@@ -176,3 +179,31 @@ export function getUserIngredientsWithId(userId) {
   };
 }
 
+export function postUser({ email, password }) {
+  const request = axios.post(`${HOST_URL}/api/user/v2`, { email, password });
+
+  return {
+    type: POST_USER,
+    payload: request
+  };
+}
+
+export function login({ email, password }) {
+  const request = axios.post(`${HOST_URL}/auth/login`, { email, password });
+
+  return {
+    type: LOGIN,
+    payload: request
+  };
+}
+
+export const checkSessionKey = () => ({ type: CHECK_SESSION_KEY, payload: axios.get(`${HOST_URL}/auth/checkSession`) });
+
+export function logout() {
+  const request = axios.get(`${HOST_URL}/auth/logout`);
+
+  return {
+    type: LOGOUT,
+    payload: request
+  };
+}

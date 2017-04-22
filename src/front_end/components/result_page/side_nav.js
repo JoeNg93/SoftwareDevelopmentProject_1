@@ -87,36 +87,38 @@ class SideNav extends Component {
   render() {
     return (
       <header>
-        <nav className="top-nav teal">
+        <nav className="top-nav teal hide-on-large-only">
           <div className="container">
             <div className="nav-wrapper">
-              <a href="/" className="brand-logo hide-on-large-only">varIngredient</a>
+              <a href="/" className="brand-logo">
+                <span className="topNavBrandNameVar">var</span>
+                <span className="topNavBrandNameIngredient">Ingredient</span>
+              </a>
               <a href="#" data-activates="nav-mobile" className="button-collapse"><i
-                className="material-icons">menu</i></a>
+                className="material-icons" id="smallNavMenuSearch">menu</i></a>
             </div>
           </div>
         </nav>
 
 
         <div className="container">
-          <a href="#" data-activates="nav-mobile" className="button-collapse side-nav full hide-on-med-and-up"><i
+          <a href="#" data-activates="nav-mobile" className="button-collapse side-nav full hide-on-large-only"><i
             className="material-icons">menu</i></a>
         </div>
         <ul id="nav-mobile" className="side-nav fixed">
-          <li className="logo fill"><a id="logo-container" href="/"><img src="../../images/varIngredient.jpg" /></a></li>
+          <li className="logo fill"><a id="logo-container" href="/"><img src="http://res.cloudinary.com/rwbarker/image/upload/c_scale,h_300,w_300/v1492503178/logo_final_bxjwsl.png" /></a></li>
+          <li className="center"><a href="/" className="waves-effect waves-orange navlinks home">Home</a></li>
+          <li className="center"><a href="#!" className="waves-effect waves-orange navlinks myPantry">My Pantry</a></li>
+          <li className="center"><a href="#!" className="waves-effect waves-orange navlinks updateSearch" onClick={this.onClickSearchAgain.bind(this)}><i className="material-icons">search</i></a></li>
           <li className="divider"></li>
-          <li className="bold"><a href="/" className="waves-effect waves-teal navlinks">Home</a></li>
-          <li className="bold"><a href="#!" className="waves-effect waves-teal navlinks">My Pantry</a></li>
-          <li className="bold"><a href="#!" className="waves-effect waves-teal navlinks" onClick={this.onClickSearchAgain.bind(this)}>SEARCH AGAIN!</a></li>
-          <li className="divider"></li>
-          <li className="bold center">
-            Your Search Ingredients
-            <ul className="collection">
+          <li className="center searchIngredients">
+            My Ingredients
+            <ul className="collection center">
               {this.renderQueryIngredients()}
             </ul>
           </li>
           <li className="divider"></li>
-          <li className="bold center">Add More Ingredients:</li>
+          <li className="center addIngredients">Add Ingredients</li>
           <ul className="collapsible" data-collapsible="expandable">
             {this.renderCategories()}
           </ul>

@@ -2,34 +2,30 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getIngredients, addQueryIngredients, clearQueryIngredients } from './../../actions/index';
 import { withRouter } from 'react-router-dom';
+import _ from 'lodash';
+import Chips from 'react-chips';
 
 class SearchRecipes extends Component {
-  componentDidMount() {
+  componentWillMount () {
+    this.props.getIngredients().then(() => this.setState({ ingredientSuggestions: _.map(this.props.allIngredients, 'name') }));
+  }
 
-
-    this.props.getIngredients().then(() => {
-      const ingredientNames = this.props.allIngredients.map(ingredient => ingredient.name);
-      var ingredients = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.whitespace,
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        // `states` is an array of state names defined in "The Basics"
-        local: ingredientNames
-      });
-
-      $('#tags').materialtags({
-        freeInput: false,
-        typeaheadjs: {
-          source: ingredients,
-        }
-      });
-    });
+  constructor() {
+    super();
+    this.state = {
+      queryIngredients: [],
+      ingredientSuggestions: []
+    };
   }
 
   submitIngredientsQuery(e) {
-    let ingredients = $('#tags').materialtags('items');
     this.props.clearQueryIngredients();
-    this.props.addQueryIngredients(...ingredients);
+    this.props.addQueryIngredients(...this.state.queryIngredients);
     this.props.history.push('/result');
+  }
+
+  onChangeSearchBar(queryIngredients) {
+    this.setState({ queryIngredients });
   }
 
   render() {
@@ -39,8 +35,8 @@ class SearchRecipes extends Component {
 
           <div className="col s6 offset-s3 element">
 
-            <div className="input-field col s12">
-              <input type="text" name="tags" id="tags" value="" data-role="materialtags" />
+            <div className="input-field col s12" id="chips">
+              <Chips suggestions={this.state.ingredientSuggestions} value={this.state.queryIngredients} onChange={this.onChangeSearchBar.bind(this)} fromSuggestionsOnly placeholder="What ingredients do you have?.."/>
             </div>
             <div className="col s6 offset-s3">
               <button className="waves-effect waves-light btn teal" id="homeSearch" onClick={this.submitIngredientsQuery.bind(this)}>Search</button>

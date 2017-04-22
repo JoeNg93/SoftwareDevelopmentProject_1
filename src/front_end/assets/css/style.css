@@ -2,30 +2,6 @@
 
 /* ----------------------------BODY------------------------*/
 
-.tt-menu {
-    background-color: white;
-    padding: 10px 5px 10px 5px;
-    color: black;
-    border-radius: 10px;
-    font-size: 14px;
-    width: 100%;
-}
-
-.tt-menu:hover {
-    cursor: pointer;
-}
-
-.tt-selectable {
-    transition: all 150ms linear;
-    text-align: center;
-}
-
-.tt-selectable:hover {
-    background-color:#00897b;
-    color: white;
-    cursor: pointer;
-}
-
 #homePageHtml html, body {
     max-width: 100%;
     overflow-x: hidden;
@@ -33,10 +9,11 @@
 
 #homePageHtml #homePageFooter {
     padding-left: 0;
+    background: #5A7280;
 }
 
 #homePageHtml .row {
-    margin:0;
+    margin: 0;
     text-align: center;
     /*color: #fbf8f2;*/
     font-family: 'Raleway', sans-serif;
@@ -54,9 +31,8 @@
     height: 100vh;
 }
 
-#homePageHtml footer{
+#homePageHtml footer {
     height: 10vh;
-    background-color: #198889 ;
 }
 
 #homePageHtml .modal .modal-footer .btn, .modal .modal-footer .btn-large, .modal .modal-footer .btn-flat {
@@ -66,24 +42,53 @@
 /* -----------NAVBAR-----------------*/
 
 .navbar-fixed .nav-wrapper a:hover {
-    background-color: #00796b !important;
+    background-color: rgb(20, 90, 140) !important;
 }
 
-.nav-wrapper{
-    background-color: #198889;
+.nav-wrapper {
+    background-color: #5A7280;
     font-family: 'Raleway', sans-serif;
     position: absolute;
+}
+
+#brandName {
+    width: 215px;
+    margin: 13px 0 0 70px;
+    display: inline-block;
+    line-height: 2;
+}
+
+#brandName:hover {
+    background: none !important;
+}
+
+#brandName h4 {
+    margin: 0;
+}
+
+#brandNameIngredient {
+    color: #0f455a;
+}
+
+nav .brand-logo {
+    height: 64px;
+}
+
+#logo:hover {
+    background: none !important;
+}
+
+#homePageHtml .btn .btn-large {
+    background: #307197;
 }
 
 /* ------------------HOME SECTION------------------- */
 
 #homePageHtml #home {
-    background-color: #35A48C;
-    background-image: url(images/fresh.jpg);
     background: linear-gradient(rgba(32, 33, 37, 0.65), rgba(32, 33, 37, 0.9)), url('images/fresh.jpg');
     background-position: center top;
     color: white;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     background-size: cover;
 }
 
@@ -91,7 +96,11 @@
     width: 100%;
 }
 
-#homePageHtml #home .row .element{
+#homePageHtml #homeSearch:hover {
+    background: rgb(20, 90, 140) !important;
+}
+
+#homePageHtml #home .row .element {
     position: absolute;
 }
 
@@ -101,6 +110,11 @@
     font-size: 16px;
     line-height: 32px;
     padding-left: 8px;
+}
+
+#homePageHtml #chips {
+    color: black;
+    margin: 10px;
 }
 
 #homePageHtml .materialize-tags {
@@ -113,16 +127,57 @@
     transform: translateY(-65%);
 }
 
+#brandNameVar {
+    color: #c5d8c4;
+}
+
+#homePageHtml #homeSearch {
+    background: #307197 !important;
+}
+
+.navbar-fixed .nav-wrapper .btn, .btn-large {
+    background: #307197 !important;
+}
+
+#homePageHtml #home .materialize-tags.active {
+    border-bottom-color: dimgrey;
+    box-shadow: none;
+}
+
+#homePageHtml .side-nav a:hover {
+    background-color: rgb(20, 90, 140) !important;
+}
+
+#homePageHtml .side-nav .btn, .btn-large {
+    background: #307197 !important;
+}
+
 /* -------------------------TOP RECIPE SECTION--------------------*/
 
-#homePageHtml #topRecipes{
-    background-color: #35A48C;
+#homePageHtml #topRecipes {
+    background-color: #F6F1EA;
+}
+
+#card2 .card .card-content, #card2 .card .card-image, #card2 .card .card-action {
+    background: white;
+}
+
+#card2 .card .card-action a {
+    color: #1976d2;
+}
+
+#topRecipeCards {
+    margin-top: 25%;
+}
+
+#homePageHtml #topRecipes #card2 {
+    margin-top: 100px;
 }
 
 /* -------------------------REVIEWS SECTION-------------------------*/
 
 #homePageHtml #reviews {
-    background-color: #E8E7A4;
+    background-color: #c3cace;
 }
 
 #homePageHtml #card {
@@ -130,10 +185,54 @@
     margin-top: 15%;
 }
 
+#homePageHtml #reviews #card .card-panel {
+    background: #307197 !important;
+}
+
+#homePageHtml #reviews .row {
+    text-align: left;
+}
+
+#homePageHtml #reviews .reviewer p {
+    float: right;
+    margin-right: 17%;
+    margin-top: 8%;
+}
+
+#homePageHtml #reviews h3 {
+    text-align: center;
+}
+
+#homePageHtml #reviews .reviewer {
+    background: dimgrey;
+    height: 92px;
+}
+
+#homePageHtml .reviewText {
+    background: whitesmoke;
+}
+
+#homePageHtml .reviewText p {
+    color: dimgrey;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 10px;
+    font-size: 18px;
+}
+
 /* -------------------------CONTACT SECTION--------------------------*/
 
 #homePageHtml #contact {
-    background-color: #DFC83D;
+    background-color: #959b9e;
+    height: 85vh;
+}
+
+#homePageHtml #contact .btn, .btn-large {
+    background: #307197 !important;
+}
+
+#homePageHtml #contact .btn:hover {
+    background: rgb(20, 90, 140) !important;
 }
 
 /* ----------------------LOGIN MODAL------------------------*/
@@ -178,11 +277,11 @@
     float: left;
 }
 
-#homePageHtml .switch label input[type=checkbox]:checked+.lever {
+#homePageHtml .switch label input[type=checkbox]:checked + .lever {
     background-color: #818181;
 }
 
-#homePageHtml .switch label input[type=checkbox]:checked+.lever:after {
+#homePageHtml .switch label input[type=checkbox]:checked + .lever:after {
     background-color: #1976d2;
 }
 
@@ -195,7 +294,7 @@
     color: #1976d2;
 }
 
-#homePageHtml #loginModalFooter{
+#homePageHtml #loginModalFooter {
     background-color: transparent;
 }
 
@@ -221,6 +320,16 @@
     color: #424242;
 }
 
+#homePageSmallNav {
+    line-height: 64px;
+}
+
+@media only screen and (max-width: 600px) {
+    #homePageHtml .modal.open {
+        width: 100%;
+    }
+}
+
 /* -----------------------SIGN UP MODAL---------------------------*/
 
 #homePageHtml #submit2 {
@@ -232,7 +341,7 @@
     text-align: center;
 }
 
- #homePageHtml#submit2:hover {
+#homePageHtml#submit2:hover {
     background-color: #1976d2;
     color: white;
 }
@@ -245,7 +354,7 @@
     color: black;
 }
 
-#homePageHtml #signupModalFooter{
+#homePageHtml #signupModalFooter {
     background-color: transparent;
 }
 
@@ -269,7 +378,7 @@
     color: white;
 }
 
-#homePageHtml #recipeModalFooter{
+#homePageHtml #recipeModalFooter {
     background-color: transparent;
 }
 
@@ -321,33 +430,33 @@
     color: #1976d2;
 }
 
- #homePageHtml#recipeInstructions + label {
+#homePageHtml#recipeInstructions + label {
     color: black;
 }
 
-
-/* needs to be fixed
-#ingredientTags .input-field:active {
-    border-bottom: 2px solid #1976d2;
-    box-shadow: none;
-}
-
-#ingredientTags {
-    border-bottom: 2px solid black;
-    box-shadow: none;
-}
-
-#ingredientTags:focus + label {
+#homePageHtml #recipeCookTime .dropdown-content li > a, .dropdown-content li > span {
     color: #1976d2;
 }
-
-#ingredientTags + label {
-    color: black;
-} */
 
 #homePageHtml #recipeRequest {
     margin-left: 8%;
     margin-right: 8%;
+}
+
+#homePageHtml #messageText:focus {
+    border-bottom-color: black !important;
+}
+
+#homePageHtml #messageText:focus + label {
+    color: black !important;
+}
+
+#homePageHtml #contactEmail:focus + label {
+    color: black !important;
+}
+
+#homePageHtml #contactEmail {
+    color: black !important;
 }
 
 /* -------------------CONTACT FORM--------------------*/
@@ -356,7 +465,7 @@
     color: #616161;
 }
 
- #homePageHtml#contactEmail:focus {
+#homePageHtml#contactEmail:focus {
     border-bottom: 2px solid teal;
     box-shadow: none;
 }
@@ -425,7 +534,7 @@ header, main, footer {
     padding-left: 300px;
 }
 
-@media only screen and (max-width : 992px) {
+@media only screen and (max-width: 992px) {
     header, main, footer {
         padding-left: 0;
     }
@@ -440,66 +549,137 @@ header, main, footer {
     padding-left: 0;
 }
 
+#logo-container:hover {
+    background: none;
+}
+
 .side-nav a .navlinks {
     padding-left: 32px;
+
 }
 
 .side-nav .collapsible-header, .side-nav.fixed .collapsible-header {
     padding: 0 32px;
 }
 
-#searchResultsHtml .card .card-image .card-title {
-    position: fixed;
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
+    color: #1976d2;
 }
 
 @media only screen and (min-width: 993px) {
     .container {
         width: 90%;
-    }}
+    }
+}
+
+.pagination li.active {
+    background: #615f5f;
+}
+
+.top-nav {
+    background: #5a7280 !important;
+}
 
 /* ---------------------------------------------RESULTS PAGE------------------------------------------------- */
 
-#searchResultsHtml .card {
-    float: left;
+#searchResultsHtml .card .card-image .card-title {
+    position: fixed;
 }
 
-#searchResultsHtml .missingIngredients {
-    color: red;
+#searchResultsHtml {
+    font-family: 'Raleway', sans-serif;
+}
+
+#searchResultsHtml .card {
+    float: left;
 }
 
 #searchResultsHtml #results {
     margin-top: 3%;
 }
 
-#searchResultsHtml .top-nav {
-    height: 110px;
-}
-
-#searchResultsHtml nav .brand-logo {
-    line-height: 110px;
-}
-
 #searchResultsHtml nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
-    line-height: 110px;
+    line-height: 57px;
+}
+
+#searchResultsHtml .updateSearch {
+    font-size: 20px;
+    font-weight: 900;
+}
+
+#searchResultsHtml .updateSearch i {
+    float: none;
+    margin: 0;
+}
+
+#searchResultsHtml .myPantry {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#searchResultsHtml .home {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.searchIngredients {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.addIngredients {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#searchResultsHtml .side-nav {
+    box-shadow: none;
+}
+
+#searchResultsHtml .missingIngredients {
+    color: red;
+}
+
+#searchResultsHtml .collapsible-header {
+    text-align: center;
+}
+
+#searchResultsBody {
+    background: rgba(212, 212, 212, 0.16);
+}
+
+#searchResultsHtml .card {
+    background: white;
+}
+
+#searchResultsHtml .card .card-action {
+    color: #1976d2;
+}
+
+#searchResultsHtml .dropdown-content li > a, .dropdown-content li > span {
+    color: #1979d4;
+}
+
+#searchResultsHtml .collapsible input[type="checkbox"].filled-in:checked + label:after {
+    background: #307197;
+    border-color: #307197;
+}
+
+#searchResultsHtml .searchIngredients .collection {
+    border: none;
 }
 
 /*!* ---------------------------------------------------RECIPE PAGE--------------------------------------------------*!*/
 
-#recipePageHtml .top-nav {
-    height: 110px;
-}
-
-#recipePageHtml nav .brand-logo {
-    line-height: 110px;
-}
-
 #recipePageHtml nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
-    line-height: 110px;
+    line-height: 57px;
 }
 
 #recipePageHtml #recipeImg {
     width: 100%;
     height: 100%;
+    border: 1px solid #f8f8f8;
+    border-radius: 10px;
 }
 
 #recipePageHtml #recipeTitle {
@@ -532,7 +712,7 @@ header, main, footer {
 }
 
 #recipePageHtml h5 {
-    border-bottom: 2px solid teal;
+    border-bottom: 2px solid #307197;
 }
 
 #recipePageHtml .custom-counter {
@@ -550,7 +730,7 @@ header, main, footer {
     content: counter(step-counter);
     margin-right: 5px;
     font-size: 80%;
-    background-color: teal;
+    background-color: #307197;
     color: white;
     font-weight: bold;
     padding: 3px 8px;
@@ -558,70 +738,220 @@ header, main, footer {
     position: absolute;
     margin: 0 0 .5rem 0;
 }
+
 #recipePageHtml #thumbup {
     margin-right: 5%;
     margin-top: .8rem;
+    background: royalblue;
 }
 
 #recipePageHtml #thumbdown {
     margin-top: .8rem;
+    background: #ED402D;
 }
 
-#recipePageHtml .directions{
+#recipePageHtml .directions {
     display: block;
     margin-left: 30px;
 }
 
 #recipePageHtml #addFavorite {
     margin-top: 1.25rem;
+    background: #307197;
 }
 
-#recipePageHtml .side-nav .fixed {
-    background-color: black;
+#recipePageHtml #addFavorite:hover {
+    background: rgb(20, 90, 140);
+}
+
+.topNavBrandNameIngredient {
+    color: #104459;
+}
+
+.topNavBrandNameVar {
+    color: #c3d7c3;
+}
+
+#recipePageHtml {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 100;
+}
+
+#recipePageHtml .side-nav {
+    box-shadow: none;
+}
+
+#recipePageHtml .side-nav li {
+    text-align: center;
+}
+
+#recipePageHtml .side-nav li a {
+    font-size: 20px;
+}
+
+#recipePageBody {
+    background: rgba(212, 212, 212, 0.16);
+}
+
+#recipePageHtml blockquote {
+    border-left-color: #307197;
 }
 
 /*!* -----------------------------------------------------USER PAGE----------------------------------------------------- *!*/
 
+#userPageHtml #dropdown1 .material-icons {
+    color: red;
+}
 
+#userPageHtml .dropdown-content .collection {
+    display: inline-block;
+}
+
+#userPageHtml #smallNavMenu {
+    color: white;
+    line-height: 57px;
+}
+
+#userPageHtml {
+    font-family: 'Raleway', sans-serif;
+}
+
+#userPageHtml .side-nav {
+    box-shadow: none;
+}
+
+#userPageBody {
+    background: rgba(212, 212, 212, 0.16);
+}
+
+#userPageHtml #homeLink {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#userPageHtml .collapsible-header {
+    text-align: center;
+}
+
+#userPageHtml .updateSearch {
+    font-size: 20px;
+    font-weight: 900;
+}
+
+#userPageHtml .updateSearch i {
+    float: none;
+    margin: 0;
+}
+
+#userPageHtml .collapsible input[type="checkbox"].filled-in:checked + label:after {
+    background: #307197;
+    border-color: #307197;
+}
+
+#userPageHtml hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+#userPageHtml h1 {
+    color: #000;
+    opacity: 0.7;
+}
 
 /*!* --------------------------------------ADMIN PAGE--------------------------------------------*!*/
 
-
-
+#adminPageHtml #smallNavMenuAdmin {
+    line-height: 57px;
+}
 
 /*!* ----------------------------------ADMIN USER PAGE---------------------------------------------- *!*/
 
+#adminPageHtml .side-nav {
+    box-shadow: none;
+}
 
+#adminPageHtml html, body {
+    background: #f8f8f8;
+}
 
+#adminPageHtml .side-nav li > a.btn, .side-nav li > a.btn-large, .side-nav li > a.btn-large, .side-nav li > a.btn-floating {
+    background: #307197 !important;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+#adminPageHtml .side-nav li > a.btn:hover, .side-nav li > a.btn-large:hover, .side-nav li > a.btn-large:hover, .side-nav li > a.btn-floating:hover {
+    background: rgb(20, 90, 140) !important;
+}
 
 /* -------------------------------------------GENERAL FOR ADMIN ADD PAGES----------------------------*/
 
 #adminSubmitItem {
     width: 100%;
+    background: #307197 !important;
+}
+
+#adminSubmitItem:hover {
+    background: rgb(20, 90, 140) !important;
 }
 
 /* ---------------------------------------------ADMIN ADD RECIPE PAGE----------------------------------------- */
 
+#addRecipeName + label {
+    color: black;
+}
 
+
+
+#addRecipeInstructions + label {
+    color: black;
+}
+
+#addIngredients #ingredientTags2 + label {
+    color: black !important;
+}
+
+#addIngredients .materialize-tags.active {
+    border-bottom-color: black !important;
+    box-shadow: none !important;
+}
 /* ---------------------------------------------ADMIN ADD INGREDIENT PAGE----------------------------------------- */
+#addIngredientName + label {
+    color: black !important;
+}
 
+#addIngredientName input:not([type]), input[type=text], input[type=password],
+input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime],
+input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea:focus {
+    border-bottom-color: black;
+    box-shadow: none;
+}
+
+#addIngredientName input:not([type]), input[type=text], input[type=password],
+input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime],
+input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
+    border-bottom-color: black;
+}
 
 /* ---------------------------------------------ADMIN ADD CATEGORY PAGE----------------------------------------- */
+#addCategoryName:focus + label {
+    color: black !important;
+}
 
+#addCategoryName + label {
+    color: black !important;
+}
+
+#addCategory .select-wrapper input.select-dropdown {
+    border-bottom-color: black;
+}
+
+#addCategoryName input:not([type]), input[type=text], input[type=password],
+input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime],
+input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea:focus {
+    border-bottom-color: black !important;
+    box-shadow: none !important;
+}
 
 /* ---------------------------------------------ADMIN RECIPE REQUEST PAGE----------------------------------------- */
 
