@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  let messaging_events = req.body.entry[0].messaging;
+  let messaging_events = req.fields.entry[0].messaging;
   messaging_events.forEach((event) => {
     console.log(event);
     let sender = event.sender.id;
