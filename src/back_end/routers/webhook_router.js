@@ -3,6 +3,8 @@ const axios = require('axios');
 
 const PAGE_TOKEN = "EAAD4Omr42JABAOnJGM1zmys74jaaNMZCCszkyhFpCKz5fA7uYdD3IWL9xMTKEHUlb4klt5b7o2wEkm7ZAUv1drIQZCqebYh3SwRgPqfsOoBd3uag54I2kIzo3zAURFVjtvDZB0Xzs0HxdlKC7FUnAjgS2xiQ12mDZCTOLtD0xFQZDZD";
 
+const CALLBACK_URL = `https://graph.facebook.com/v2.6/me/messages?access_token=${PAGE_TOKEN}`;
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -31,7 +33,7 @@ router.post('/', (req, res) => {
 
 function sendText(sender, text) {
   let messageData = { text };
-  axios.post(`https://graph.facebook.com/v2.6/me/messages?access_token=${page_token}`, {
+  axios.post(CALLBACK_URL, {
     recipient: { id: sender },
     message: messageData
   }).then((response) => {
@@ -74,7 +76,7 @@ function sendGenericMessage(sender) {
       }
     }
   };
-  axios.post(`https://graph.facebook.com/v2.6/me/messages?access_token=${page_token}`, {
+  axios.post(CALLBACK_URL, {
     recipient: { id: sender },
     message: messageData
   }).then((response) => {
