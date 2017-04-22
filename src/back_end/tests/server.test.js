@@ -70,8 +70,7 @@ describe('GET /category/:id/ingredients', () => {
       .get(`/api/category/${categories[4]._id}/ingredients`)
       .expect(200)
       .expect((res) => {
-        expect(res.body.ingredients).to.have.length(2);
-        expect(res.body.ingredients[0]._id).to.equal(ingredients[8]._id.toHexString());
+        expect(res.body.ingredients).to.have.length(ingredients.filter(ingredient => ingredient.categoryName == categories[4].name).length);
       })
       .end(done);
   });
