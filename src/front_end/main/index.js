@@ -10,15 +10,13 @@ import ResultPage from './../components/result_page/index';
 import UserPage from './../components/user_page/index';
 import RecipePage from './../components/recipe_page/index';
 
-// const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
-
 ReactDOM.render(
   <Provider store={store}>
     <Router>
       <div>
         <Route exact path="/" component={MainPage} />
         <Route path="/result" component={ResultPage} />
-        <Route path="/user" component={UserPage} />
+        <Route path="/user/:id" component={UserPage} />
         <Route path="/recipe/:id" component={RecipePage} />
       </div>
     </Router>

@@ -4,16 +4,18 @@ import { connect } from 'react-redux';
 import SideNav from './side_nav';
 import RecipeInfo from './recipe_info';
 
-import { getRecipeWithId } from './../../actions/index';
+import { getRecipeWithId, getUser } from './../../actions/index';
 
 class RecipePage extends Component {
   componentWillMount() {
     const recipeId = this.props.match.params.id;
     this.props.getRecipeWithId(recipeId);
+    this.props.getUser();
   }
 
   componentDidMount() {
     $(".button-collapse").sideNav();
+    $('.modal').modal();
   }
 
   render() {
@@ -26,4 +28,4 @@ class RecipePage extends Component {
   }
 }
 
-export default connect(null, { getRecipeWithId })(RecipePage);
+export default connect(null, { getRecipeWithId, getUser })(RecipePage);

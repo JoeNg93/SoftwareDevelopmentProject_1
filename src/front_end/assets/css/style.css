@@ -325,7 +325,7 @@ nav .brand-logo {
 }
 
 @media only screen and (max-width: 600px) {
-    #homePageHtml .modal.open {
+    #homePageHtml .modal {
         width: 100%;
     }
 }
@@ -592,6 +592,7 @@ header, main, footer {
 
 #searchResultsHtml .card {
     float: left;
+    width: 100%;
 }
 
 #searchResultsHtml #results {
@@ -669,6 +670,10 @@ header, main, footer {
     border: none;
 }
 
+#searchResultsHtml .searchIngredients .collection .collection-item {
+    border: none;
+}
+
 /*!* ---------------------------------------------------RECIPE PAGE--------------------------------------------------*!*/
 
 #recipePageHtml nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
@@ -737,17 +742,6 @@ header, main, footer {
     border-radius: 2px;
     position: absolute;
     margin: 0 0 .5rem 0;
-}
-
-#recipePageHtml #thumbup {
-    margin-right: 5%;
-    margin-top: .8rem;
-    background: royalblue;
-}
-
-#recipePageHtml #thumbdown {
-    margin-top: .8rem;
-    background: #ED402D;
 }
 
 #recipePageHtml .directions {
@@ -858,6 +852,10 @@ header, main, footer {
 #userPageHtml h1 {
     color: #000;
     opacity: 0.7;
+}
+
+#userPageHtml .card {
+    width: 100%;
 }
 
 /*!* --------------------------------------ADMIN PAGE--------------------------------------------*!*/

@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { logout } from './../../actions/index';
-import { checkSessionKey } from './../../actions/index';
+import { getUser } from './../../actions/index';
+import { Link } from 'react-router-dom';
 
 class NavBar extends Component {
-  onClickLogout() {
-    this.props.logout().then(() => this.props.checkSessionKey());
+  componentWillMount() {
+    this.props.getUser();
   }
-  
+
+  onClickLogout() {
+    this.props.logout().then(() => this.props.getUser());
+  }
+
   renderUserPermissionButtons() {
-    if (this.props.isSessionKeyExist) {
+    if (this.props.currentUser) {
       return (
         <span>
           <li><a className="waves-effect waves-light btn teal" href="#!" onClick={this.onClickLogout.bind(this)}><i className="material-icons left">thumb_down</i>Logout</a>
           </li>
-          <li><a className="waves-effect waves-light btn teal" href="userPage.html"><i
-            className="material-icons left">shopping_basket</i>My Pantry</a></li>
+          <li><Link className="waves-effect waves-light btn teal" to={`/user/${this.props.currentUser._id}`}><i
+            className="material-icons left">shopping_basket</i>My Pantry</Link></li>
         </span>
       );
     } else {
@@ -37,6 +42,8 @@ class NavBar extends Component {
           <div className="nav-wrapper">
 
             <a href="#home" className="brand-logo"><img src="http://res.cloudinary.com/rwbarker/image/upload/c_scale,h_64,w_64/v1492540669/logo_final_secondary_pages_tlz4sw.png" /></a>
+            <a href="#home" className="hide-on-med-and-down" id="brandName"><h4><span id="brandNameVar">var</span><span
+              id="brandNameIngredient">Ingredient</span></h4></a>
             <a href="#" data-activates="mobile-demo" className="button-collapse"><i className="material-icons" id="homePageSmallNav">menu</i></a>
             <ul id="nav-mobile" className="right hide-on-med-and-down">
               <li><a href="#topRecipes">Top Recipes</a></li>
@@ -53,8 +60,8 @@ class NavBar extends Component {
 
 function mapStateToProps(state) {
   return {
-    isSessionKeyExist: state.users.isSessionKeyExist
+    currentUser: state.users.currentUser
   };
 }
 
-export default connect(mapStateToProps, { logout, checkSessionKey })(NavBar);
+export default connect(mapStateToProps, { logout, getUser })(NavBar);

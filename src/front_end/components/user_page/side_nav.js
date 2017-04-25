@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
-import { getCategories, removeQueryIngredient, addQueryIngredients, getSortedRecipesWithIngredients, getUser, getIngredients } from './../../actions/index';
-import { connect } from 'react-redux'
-import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { getCategories, getIngredients, getUser, postUserIngredient, deleteUserIngredient } from './../../actions/index';
+import _ from 'lodash';
+
 
 class SideNav extends Component {
   componentWillMount() {
-    this.props.getCategories();
-    this.props.getIngredients();
-    this.props.getUser();
+    this.props.getUser().then(() => {
+      if (!this.props.currentUser) {
+        this.props.history.push('/');
+        return;
+      }
+      this.props.getCategories();
+      this.props.getIngredients();
+    })
+
   }
 
   componentDidUpdate() {
-    this.props.queryIngredients.forEach(ingredientName => this.checkIngredientCheckbox(ingredientName));
+    _.map(this.props.currentUser.ingredients, 'name').forEach(ingredientName => this.checkIngredientCheckbox(ingredientName));
   }
 
   renderCategories() {
@@ -34,18 +42,20 @@ class SideNav extends Component {
 
   onClickOnCheckbox(e) {
     const isChecked = $(e.target).prop('checked');
-    const ingredientName = $('#searchResultsHtml').find(`label[id=${e.target.id}]`).html();
+    console.log('isChecked: ', isChecked);
+    const ingredientId = e.target.id;
+    const ingredientName = $('#userPageHtml').find(`label[id=${ingredientId}]`).html();
     if (isChecked) {
-      this.props.addQueryIngredients(ingredientName);
+      this.props.postUserIngredient(this.props.currentUser._id, ingredientId, ingredientName);
     } else {
-      this.props.removeQueryIngredient(ingredientName);
+      this.props.deleteUserIngredient(this.props.currentUser._id, ingredientId, ingredientName);
     }
   }
 
   renderIngredientsInCategory(categoryName) {
     return this.props.ingredients.filter(ingredient => ingredient.categoryName === categoryName)
       .map((ingredient) => {
-        const isChecked = this.props.queryIngredients.indexOf(ingredient.name) != -1;
+        const isChecked = this.props.ingredients.indexOf(ingredient.name) != -1;
         return (
           <span>
             <input type="checkbox" className="filled-in" id={ingredient._id} onClick={this.onClickOnCheckbox.bind(this)} />
@@ -55,43 +65,36 @@ class SideNav extends Component {
       });
   }
 
-  renderQueryIngredients() {
-    return this.props.queryIngredients.map((ingredientName) => {
+  renderMyIngredients() {
+    return _.map(this.props.currentUser.ingredients, 'name').map((ingredientName) => {
       return (
         <li className="collection-item" id={ingredientName}>
           <div>
-            {ingredientName}<a href="#!" className="secondary-content" onClick={this.onClickRemoveQueryIngredient.bind(this)}><i className="material-icons" id={ingredientName}>delete</i></a>
+            {ingredientName}<a href="#!" className="secondary-content" onClick={this.onClickRemoveIngredient.bind(this)}><i className="material-icons" id={ingredientName}>delete</i></a>
           </div>
         </li>
       );
     });
   }
 
-  onClickMyPantry(e) {
-    if (this.props.currentUser) {
-      this.props.history.push(`/user/${this.props.currentUser._id}`);
-      return;
-    } else {
-      $('#myPantryModalResultPage').modal('open');
-    }
-  }
-
-  onClickRemoveQueryIngredient(e) {
+  onClickRemoveIngredient(e) {
     const removeIngredientName = $(e.target).attr('id');
+    const removeIngredientId = this.props.currentUser.ingredients.find(ingredient => ingredient.name === removeIngredientName)._id;
     this.uncheckIngredientCheckbox(removeIngredientName);
-    this.props.removeQueryIngredient(removeIngredientName);
+    this.props.deleteUserIngredient(this.props.currentUser._id, removeIngredientId, removeIngredientName);
   }
 
   uncheckIngredientCheckbox(ingredientName) {
-    const checkboxId = $('#searchResultsHtml').find(`label:contains(${ingredientName})`).prop('id');
-    $('#searchResultsHtml').find(`input[id=${checkboxId}]`).prop('checked', false);
+    const checkboxId = $('#userPageHtml').find(`label:contains(${ingredientName})`).prop('id');
+    $('#userPageHtml').find(`input[id=${checkboxId}]`).prop('checked', false);
   }
 
   checkIngredientCheckbox(ingredientName) {
-    const checkboxId = $('#searchResultsHtml').find(`label:contains(${ingredientName})`).prop('id');
-    $('#searchResultsHtml').find(`input[id=${checkboxId}]`).prop('checked', true);
+    const checkboxId = $('#userPageHtml').find(`label:contains(${ingredientName})`).prop('id');
+    $('#userPageHtml').find(`input[id=${checkboxId}]`).prop('checked', true);
   }
 
+  // NEED TO FIX
   onClickSearchAgain(e) {
     this.props.getSortedRecipesWithIngredients(this.props.queryIngredients, this.props.sortKey, 0, 0);
   }
@@ -104,10 +107,10 @@ class SideNav extends Component {
           <nav className="top-nav teal hide-on-large-only">
             <div className="container">
               <div className="nav-wrapper">
-                <Link to="/" className="brand-logo">
+                <a href="/" className="brand-logo">
                   <span className="topNavBrandNameVar">var</span>
                   <span className="topNavBrandNameIngredient">Ingredient</span>
-                </Link>
+                </a>
                 <a href="#" data-activates="nav-mobile" className="button-collapse"><i
                   className="material-icons" id="smallNavMenuSearch">menu</i></a>
               </div>
@@ -120,15 +123,14 @@ class SideNav extends Component {
               className="material-icons">menu</i></a>
           </div>
           <ul id="nav-mobile" className="side-nav fixed">
-            <li className="logo fill"><Link id="logo-container" to="/"><img src="http://res.cloudinary.com/rwbarker/image/upload/c_scale,h_300,w_300/v1492503178/logo_final_bxjwsl.png" /></Link></li>
-            <li className="center"><Link to="/" className="waves-effect waves-orange navlinks home">Home</Link></li>
-            <li className="center"><a href="#myPantryModal" className="waves-effect waves-orange navlinks myPantry" onClick={this.onClickMyPantry.bind(this)}>My Pantry</a></li>
+            <li className="logo fill"><a id="logo-container" href="/"><img src="http://res.cloudinary.com/rwbarker/image/upload/c_scale,h_300,w_300/v1492503178/logo_final_bxjwsl.png" /></a></li>
+            <li className="center"><a href="/" className="waves-effect waves-orange navlinks home">Home</a></li>
             <li className="center"><a href="#!" className="waves-effect waves-orange navlinks updateSearch" onClick={this.onClickSearchAgain.bind(this)}><i className="material-icons">search</i></a></li>
             <li className="divider"></li>
             <li className="center searchIngredients">
               My Ingredients
             <ul className="collection center">
-                {this.renderQueryIngredients()}
+                {this.renderMyIngredients()}
               </ul>
             </li>
             <li className="divider"></li>
@@ -139,41 +141,20 @@ class SideNav extends Component {
           </ul>
         </header>
 
-        <div id="myPantryModalResultPage" className="modal">
-          <div className="modal-content center">
-            <div className="row">
-              <div className="col s6 offset-s3">
-                <h3>Warning</h3>
-              </div>
-            </div>
-            <hr />
-            <div className="row">
-              <p>Please back to home page and login to check your Pantry</p>
-            </div>
-          </div>
-          <div className="modal-footer center">
-            <div className="row">
-              <div className="col s6 offset-s3">
-                <a href="/" class="modal-action modal-close waves-effect waves-default btn">Back To Homepage</a>
-              </div>
-            </div>
-          </div>
-        </div>
 
       </div>
 
     );
   }
+
 }
 
 function mapStateToProps(state) {
   return {
     categories: state.categories.allCategories,
     ingredients: state.ingredients.allIngredients,
-    queryIngredients: state.ingredients.queryIngredients,
-    sortKey: state.ingredients.sortKey,
     currentUser: state.users.currentUser
-  }
+  };
 }
 
-export default withRouter(connect(mapStateToProps, { getCategories, removeQueryIngredient, addQueryIngredients, getSortedRecipesWithIngredients, getUser, getIngredients })(SideNav));
+export default withRouter(connect(mapStateToProps, { getCategories, getIngredients, getUser, postUserIngredient, deleteUserIngredient })(SideNav));

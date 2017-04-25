@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
 
+import SideNav from './side_nav';
+
 class UserPage extends Component {
+  componentDidMount() {
+    $('select').material_select();
+    $('.button-collapse').sideNav();
+    $('.scrollspy').scrollSpy();
+    $('.modal').modal();
+    $('.collapsible').collapsible();
+  }
+
   render() {
     return (
-      <div>This is user page</div>
+      <div id="userPageHtml">
+        <SideNav />
+      </div>
     );
   }
 }

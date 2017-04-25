@@ -3,7 +3,6 @@ import { Field, reduxForm, SubmissionError } from 'redux-form';
 import { login } from './../../actions/index';
 import { connect } from 'react-redux';
 import validator from 'validator';
-import { checkSessionKey } from './../../actions/index';
 import { renderField, validate, encodeInput } from './../../utils/index';
 
 class LoginModal extends Component {
@@ -15,7 +14,6 @@ class LoginModal extends Component {
       }
       $('#loginModal').modal('close');
       this.props.reset();
-      this.props.checkSessionKey();
     });
   }
 
@@ -83,4 +81,4 @@ LoginModal = reduxForm({
   validate
 })(LoginModal);
 
-export default connect(null, { login, checkSessionKey })(LoginModal);
+export default connect(null, { login })(LoginModal);

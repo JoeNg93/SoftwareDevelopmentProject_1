@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { checkSessionKey } from './../../actions/index';
+import { getUser } from './../../actions/index';
 
 import NavBar from './nav_bar';
 import LoginModal from './login_modal';
@@ -13,10 +13,6 @@ import Contact from './contact';
 import Footer from './footer';
 
 class MainPage extends Component {
- componentWillMount()  {
-   this.props.checkSessionKey();
- }
-
   componentDidMount() {
     $('select').material_select();
     $('.button-collapse').sideNav();
@@ -45,4 +41,4 @@ class MainPage extends Component {
   }
 }
 
-export default connect(null, { checkSessionKey })(MainPage);
+export default connect(null, { getUser })(MainPage);

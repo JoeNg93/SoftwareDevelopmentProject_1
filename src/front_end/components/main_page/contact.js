@@ -33,7 +33,7 @@ class Contact extends Component {
                       <div className="col s12">
                         <div className="input-field">
                           <input id="contactEmail2" type="email" className="validate" />
-                          <label for="contactEmail2" data-error="Please try again."
+                          <label htmlFor="contactEmail2" data-error="Please try again."
                             data-success="">Email</label>
                         </div>
                       </div>
@@ -44,7 +44,7 @@ class Contact extends Component {
                         <div className="input-field">
                           <textarea id="recipeName" className="materialize-textarea"
                             required="required"></textarea>
-                          <label for="recipeName">Recipe Name</label>
+                          <label htmlFor="recipeName">Recipe Name</label>
                         </div>
                       </div>
                     </div>
@@ -54,7 +54,7 @@ class Contact extends Component {
                         <div className="input-field">
                           <input type="text" name="tags" id="ingredientTags" value=""
                             data-role="materialtags" required />
-                          <label for="ingredientTags">Ingredients: Please add name and
+                          <label htmlFor="ingredientTags">Ingredients: Please add name and
                                                     amount.</label>
                         </div>
                       </div>
@@ -157,7 +157,7 @@ class Contact extends Component {
                         <div className="input-field">
                           <textarea id="recipeInstructions" className="materialize-textarea"
                             required="required"></textarea>
-                          <label for="recipeInstructions">Recipe Instructions</label>
+                          <label htmlFor="recipeInstructions">Recipe Instructions</label>
                         </div>
                       </div>
                     </div>
@@ -178,14 +178,14 @@ class Contact extends Component {
             <div className="row">
               <div className="input-field col s4">
                 <input id="contactEmail" type="email" className="validate" />
-                <label for="contactEmail" data-error="Please try again." data-success="">Email</label>
+                <label htmlFor="contactEmail" data-error="Please try again." data-success="">Email</label>
               </div>
             </div>
 
             <div className="row">
               <div className="input-field col s4">
                 <textarea id="messageText" className="materialize-textarea" required="required"></textarea>
-                <label for="messageText">Message</label>
+                <label htmlFor="messageText">Message</label>
               </div>
             </div>
             <div className="row">

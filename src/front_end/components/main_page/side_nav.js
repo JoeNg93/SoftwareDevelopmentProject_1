@@ -1,6 +1,36 @@
 import React, { Component } from 'react';
+import { logout, getUser } from './../../actions/index';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 class SideNav extends Component {
+
+  renderUserPermissionButtons() {
+    if (this.props.currentUser) {
+      return (
+        <span>
+          <li><a className="waves-effect waves-light btn teal" href="#!" onClick={this.onClickLogout.bind(this)}><i className="material-icons left">thumb_down</i>Logout</a>
+          </li>
+          <li><Link className="waves-effect waves-light btn teal" to={`/user/${this.props.currentUser._id}`}><i
+            className="material-icons left">shopping_basket</i>My Pantry</Link></li>
+        </span>
+      );
+    } else {
+      return (
+        <span>
+          <li><a className="waves-effect waves-light btn teal" href="#loginModal"><i className="material-icons left">perm_identity</i>Login</a>
+          </li>
+          <li><a className="waves-effect waves-light btn teal" href="#signupModal"><i
+            className="material-icons left">subtitles</i>Sign-up</a></li>
+        </span>
+      );
+    }
+  }
+
+  onClickLogout() {
+    this.props.logout().then(() => this.props.getUser());
+  }
+
   render() {
     return (
       <div className="sideNav">
@@ -8,14 +38,17 @@ class SideNav extends Component {
           <li><a href="#topRecipes">Top Recipes</a></li>
           <li><a href="#reviews">Reviews</a></li>
           <li><a href="#contact">Contact</a></li>
-          <li><a className="waves-effect waves-light btn teal" href="#loginModal"><i className="material-icons left">perm_identity</i>Login</a>
-          </li>
-          <li><a className="waves-effect waves-light btn teal" href="#signupModal"><i className="material-icons left">subtitles</i>Sign-up</a>
-          </li>
+          {this.renderUserPermissionButtons()}
         </ul>
       </div>
     );
   }
 }
 
-export default SideNav;
+function mapStateToProps(state) {
+  return {
+    currentUser: state.users.currentUser
+  };
+}
+
+export default connect(mapStateToProps, { logout, getUser })(SideNav);

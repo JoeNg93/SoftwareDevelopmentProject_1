@@ -879,8 +879,8 @@ if (jQuery) {
     init : function(options) {
       var defaults = {
         opacity: 0.5,
-        inDuration: 350,
-        outDuration: 250,
+        inDuration: 200,
+        outDuration: 200,
         ready: undefined,
         complete: undefined,
         dismissible: true,
