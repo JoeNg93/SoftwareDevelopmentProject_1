@@ -31,14 +31,20 @@ export const POST_CATEGORY = 'POST_CATEGORY';
 
 // USER ACTION TYPES
 export const GET_USERS = 'GET_USERS';
+export const GET_USER = 'GET_USER';
 export const GET_USER_ID_FAVORITE_RECIPES = 'GET_USER_ID_FAVORITE_RECIPES';
 export const GET_USER_ID_INGREDIENTS = 'GET_USER_ID_INGREDIENTS';
 export const POST_USER_ID_FAVORITE_RECIPE = 'POST_USER_ID_FAVORITE_RECIPE';
 export const POST_USER_ID_INGREDIENT = 'POST_USER_ID_INGREDIENT';
+export const DELETE_USER_ID_FAVORITE_RECIPE = 'DELETE_USER_ID_FAVORITE_RECIPE';
+export const DELETE_USER_ID_INGREDIENT = 'DELETE_USER_ID_INGREDIENT';
 export const POST_USER = 'POST_USER';
-export const CHECK_SESSION_KEY = 'CHECK_SESSION_KEY';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const LIKE_RECIPE = 'LIKE_RECIPE';
+export const UNLIKE_RECIPE = 'UNLIKE_RECIPE';
+export const DISLIKE_RECIPE = 'DISLIKE_RECIPE';
+export const UNDISLIKE_RECIPE = 'UNDISLIKE_RECIPE';
 
 // RECIPE ACTIONS
 export function getRecipes() {
@@ -161,6 +167,15 @@ export function getUsers() {
   };
 }
 
+export function getUser() {
+  const request = axios.get(`${HOST_URL}/api/user`);
+
+  return {
+    type: GET_USER,
+    payload: request
+  };
+}
+
 export function getUserFavoriteRecipesWithId(userId) {
   const request = axios.get(`${HOST_URL}/api/user/${userId}/favoriteRecipes`);
 
@@ -197,7 +212,77 @@ export function login({ email, password }) {
   };
 }
 
-export const checkSessionKey = () => ({ type: CHECK_SESSION_KEY, payload: axios.get(`${HOST_URL}/auth/checkSession`) });
+export function likeRecipe(userId, recipeId) {
+  const request = axios.post(`${HOST_URL}/api/user/${userId}/likeRecipe`, { _id: recipeId });
+
+  return {
+    type: LIKE_RECIPE,
+    payload: request
+  };
+}
+
+export function unlikeRecipe(userId, recipeId) {
+  const request = axios.post(`${HOST_URL}/api/user/${userId}/unlikeRecipe`, { _id: recipeId });
+
+  return {
+    type: UNLIKE_RECIPE,
+    payload: request
+  };
+}
+
+export function dislikeRecipe(userId, recipeId) {
+  const request = axios.post(`${HOST_URL}/api/user/${userId}/dislikeRecipe`, { _id: recipeId });
+
+  return {
+    type: DISLIKE_RECIPE,
+    payload: request
+  };
+}
+
+export function undislikeRecipe(userId, recipeId) {
+  const request = axios.post(`${HOST_URL}/api/user/${userId}/undislikeRecipe`, { _id: recipeId });
+
+  return {
+    type: UNDISLIKE_RECIPE,
+    payload: request
+  };
+}
+
+export function deleteUserIngredient(userId, ingredientId) {
+  const request = axios.delete(`${HOST_URL}/api/user/${userId}/ingredient/${ingredientId}`);
+
+  return {
+    type: DELETE_USER_ID_INGREDIENT,
+    payload: request
+  };
+}
+
+export function deleteUserFavoriteRecipe(userId, recipeId) {
+  const request = axios.delete(`${HOST_URL}/api/user/${userId}/favoriteRecipe/${recipeId}`);
+
+  return {
+    type: DELETE_USER_ID_FAVORITE_RECIPE,
+    payload: request
+  };
+}
+
+export function postUserIngredient(userId, ingredientId, ingredientName) {
+  const request = axios.post(`${HOST_URL}/api/user/${userId}/ingredient`, { _id: ingredientId, name: ingredientName });
+
+  return {
+    type: POST_USER_ID_INGREDIENT,
+    payload: request
+  };
+}
+
+export function postUserFavoriteRecipe(userId, recipeId, recipeName) {
+  const request = axios.post(`${HOST_URL}/api/user/${userId}/favoriteRecipe`, { _id: recipeId, name: recipeName });
+
+  return {
+    type: POST_USER_ID_FAVORITE_RECIPE,
+    payload: request
+  };
+}
 
 export function logout() {
   const request = axios.get(`${HOST_URL}/auth/logout`);
