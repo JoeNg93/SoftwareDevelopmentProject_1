@@ -26,7 +26,7 @@ router.post('/login', (req, res) => {
 
   User.findByCredentials(email, password)
     .then(user => {
-      userData = _.pick(['_id', 'ingredients', 'favoriteRecipes', 'isAdmin'])(user);
+      userData = _.pick(['_id', 'ingredients', 'favoriteRecipes', 'isAdmin', 'likedRecipes', 'dislikedRecipes'])(user);
       return user.generateAuthToken();
     })
     .then((token) => {

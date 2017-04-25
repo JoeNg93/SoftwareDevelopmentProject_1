@@ -43,6 +43,8 @@ const UserSchema = new mongoose.Schema({
       name: String
     }
   ],
+  likedRecipes: [String],
+  dislikedRecipes: [String],
   isAdmin: Boolean
 });
 

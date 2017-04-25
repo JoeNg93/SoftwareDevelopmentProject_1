@@ -52,11 +52,17 @@ router.get('/', (req, res) => {
       },
       "User": {
         "GET /users": "Get all users in db",
-        "GET /user/:id/favoriteRecipes": "Get favorite recipes of an user specified by its id",
-        "GET /user/:id/ingredients": "Get ingredients of an user specified by its id",
-        "POST /user/:id/favoriteRecipe": "Submit a single favorite recipe for an user with id. Fields: _id, name",
-        "POST /user/:id/ingredient": "Submit a single ingredient for an user with id. Fields: _id, name",
-        "POST /user/v2": "Register user info. Fields: email, password"
+        "GET /user/:userId/favoriteRecipes": "Get favorite recipes of an user specified by its id",
+        "GET /user/:userId/ingredients": "Get ingredients of an user specified by its id",
+        "POST /user/:userId/favoriteRecipe": "Submit a single favorite recipe for an user with id. Fields: _id, name",
+        "POST /user/:userId/ingredient": "Submit a single ingredient for an user with id. Fields: _id, name",
+        "POST /user/v2": "Register user info. Fields: email, password",
+        "DELETE /user/:userId/ingredient/:ingredientId": "Delete an ingredient",
+        "DELETE /user/:userId/favoriteRecipe/:recipeId": "Delete a favorite recipe",
+        "POST /user/:userId/likeRecipe": "Like a recipe -> increase num of likes of recipe by 1 and add the _id of the recipe to user's liked recipes array. Fields: _id (recipeId)",
+        "POST /user/:userId/unlikeRecipe": "Unlike a recipe -> decrease num of likes of recipe by 1 and remove the _id of the recipe from user's liked recipes . Fields: _id (recipeId)",
+        "POST /user/:userId/dislikeRecipe": "Dislike a recipe -> same as above, but for num of dislikes and user's disliked recipes. Fields: _id(recipeId)",
+        "POST /user/:userId/undislikeRecipe": "Undislike a recipe -> same as above, but for num of dislikes and user's disliked recipes. Fields: _id(recipeId)"
       },
       "Auth (use /auth instead of /api)": {
         "POST /login": "Login. Fields: email, password",
@@ -351,7 +357,7 @@ router.post('/category', (req, res) => {
 // USER ROUTES
 
 function getUserPropertyForResponse(user) {
-  return _.pick(['_id', 'email', 'favoriteRecipes', 'ingredients'])(user);
+  return _.pick(['_id', 'email', 'favoriteRecipes', 'ingredients', 'likedRecipes', 'dislikedRecipes', 'isAdmin'])(user);
 }
 
 router.get('/users', (req, res) => {
@@ -360,6 +366,18 @@ router.get('/users', (req, res) => {
       const usersReturn = users.map(user => getUserPropertyForResponse(user));
       res.send({ users: usersReturn });
     })
+    .catch(err => res.status(400).send());
+});
+
+router.get('/user', (req, res) => {
+  const token = req.varIngredientSession.token || req.get('Authorization');
+
+  if (!token) {
+    return res.status(401).send();
+  }
+
+  User.findByToken(token)
+    .then(user => res.send({ user: getUserPropertyForResponse(user) }))
     .catch(err => res.status(400).send());
 });
 
@@ -447,6 +465,185 @@ router.post('/user/:id/ingredient', (req, res) => {
     .then(user => res.send({ user: getUserPropertyForResponse(user) }))
     .catch(err => res.status(400).send());
 });
+
+router.delete('/user/:userId/ingredient/:ingredientId', (req, res) => {
+  const userId = req.params.userId;
+  const ingredientId = req.params.ingredientId;
+
+  if (!ObjectID.isValid(userId)) {
+    return res.status(400).send();
+  }
+
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(401).send();
+      }
+
+      const ingredientIndex = user.ingredients.findIndex(ingredient => ingredient._id === ingredientId);
+      user.ingredients.splice(ingredientIndex, 1);
+      return user.save();
+    })
+    .then(user => res.send({ user: getUserPropertyForResponse(user) }))
+    .catch(err => res.status(400).send());
+
+});
+
+router.delete('/user/:userId/favoriteRecipe/:recipeId', (req, res) => {
+  const userId = req.params.userId;
+  const recipeId = req.params.recipeId;
+
+  if (!ObjectID.isValid(userId)) {
+    return res.status(400).send();
+  }
+
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(401).send();
+      }
+
+      const recipeIndex = user.favoriteRecipes.findIndex(recipe => recipe._id === recipeId);
+      user.favoriteRecipes.splice(recipeIndex, 1);
+      return user.save();
+    })
+    .then(user => res.send({ user: getUserPropertyForResponse(user) }))
+    .catch(err => res.status(400).send());
+});
+
+router.post('/user/:id/likeRecipe', (req, res) => {
+  const userId = req.params.id;
+  const recipeId = req.fields._id;
+  let user = null;
+  let recipe = null;
+
+  User.findById(userId)
+    .then((foundUser) => {
+      if (!foundUser) {
+        return res.status(401).send();
+      }
+      user = foundUser;
+      return Recipe.findById(recipeId);
+    })
+    .then((foundRecipe) => {
+      if (!foundRecipe) {
+        return res.status(404).send();
+      }
+      foundRecipe.numOfLikes += 1;
+      return foundRecipe.save();
+    })
+    .then((foundRecipe) => {
+      user.likedRecipes.push(recipeId);
+      recipe = foundRecipe;
+      return user.save();
+    })
+    .then(user => res.send({ user: getUserPropertyForResponse(user), recipe }))
+    .catch(err => {
+      res.status(400).send();
+    });
+});
+
+router.post('/user/:id/unlikeRecipe', (req, res) => {
+  const userId = req.params.id;
+  const recipeId = req.fields._id;
+  let user = null;
+  let recipe = null;
+
+  User.findById(userId)
+    .then((foundUser) => {
+      if (!foundUser) {
+        return res.status(401).send();
+      }
+      user = foundUser;
+      return Recipe.findById(recipeId);
+    })
+    .then((foundRecipe) => {
+      if (!foundRecipe) {
+        return res.status(404).send();
+      }
+      foundRecipe.numOfLikes -= 1;
+      return foundRecipe.save();
+    })
+    .then((foundRecipe) => {
+      const recipeIndex = user.likedRecipes.findIndex(recipeId => recipeId === foundRecipe._id);
+      user.likedRecipes.splice(recipeIndex, 1);
+      recipe = foundRecipe
+      return user.save();
+    })
+    .then(user => res.send({ user: getUserPropertyForResponse(user), recipe }))
+    .catch(err => {
+      res.status(400).send();
+    });
+
+});
+
+router.post('/user/:id/dislikeRecipe', (req, res) => {
+  const userId = req.params.id;
+  const recipeId = req.fields._id;
+  let user = null;
+  let recipe = null;
+
+  User.findById(userId)
+    .then((foundUser) => {
+      if (!foundUser) {
+        return res.status(401).send();
+      }
+      user = foundUser;
+      return Recipe.findById(recipeId);
+    })
+    .then((foundRecipe) => {
+      if (!foundRecipe) {
+        return res.status(404).send();
+      }
+      foundRecipe.numOfDislikes += 1;
+      return foundRecipe.save();
+    })
+    .then((foundRecipe) => {
+      user.dislikedRecipes.push(recipeId);
+      recipe = foundRecipe
+      return user.save();
+    })
+    .then(user => res.send({ user: getUserPropertyForResponse(user), recipe }))
+    .catch(err => {
+      res.status(400).send();
+    });
+    
+});
+
+router.post('/user/:id/undislikeRecipe', (req, res) => {
+  const userId = req.params.id;
+  const recipeId = req.fields._id;
+  let user = null;
+  let recipe = null;
+
+  User.findById(userId)
+    .then((foundUser) => {
+      if (!foundUser) {
+        return res.status(401).send();
+      }
+      user = foundUser;
+      return Recipe.findById(recipeId);
+    })
+    .then((foundRecipe) => {
+      if (!foundRecipe) {
+        return res.status(404).send();
+      }
+      foundRecipe.numOfDislikes -= 1;
+      return foundRecipe.save();
+    })
+    .then((foundRecipe) => {
+      const recipeIndex = user.likedRecipes.findIndex(recipeId => recipeId === foundRecipe._id);
+      user.dislikedRecipes.splice(recipeIndex, 1);
+      recipe = foundRecipe
+      return user.save();
+    })
+    .then(user => res.send({ user: getUserPropertyForResponse(user), recipe }))
+    .catch(err => {
+      res.status(400).send();
+    });
+
+});
+
 
 router.post('/user/v1', (req, res) => {
   const { email, password } = req.fields;

@@ -723,6 +723,125 @@ describe('POST /user/v1', () => {
   });
 });
 
+describe('POST /user/:id/likeRecipe', () => {
+  it('should return a user with new liked recipes', (done) => {
+    const recipe = {
+      _id: recipes[0]._id
+    };
+    const userId = users[0]._id;
+
+    request(app)   
+      .post(`/api/user/${userId}/likeRecipe`)
+      .send(recipe)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.user.likedRecipes).to.have.length(1);
+      })
+      .end((err, res) => {
+        Recipe.findById(recipes[0]._id).then((recipe) => {
+          expect(recipe.numOfLikes).to.equal(recipes[0].numOfLikes + 1);
+          done();
+        });
+      });
+
+  });
+});
+
+describe('POST /user/:id/unlikeRecipe', () => {
+  it('should return a user object with removed like recipe', (done) => {
+    const recipe = {
+      _id: recipes[0]._id
+    };
+    const userId = users[0]._id;
+
+    request(app)   
+      .post(`/api/user/${userId}/unlikeRecipe`)
+      .send(recipe)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.user.likedRecipes).to.have.length(0);
+      })
+      .end((err, res) => {
+        Recipe.findById(recipes[0]._id).then((recipe) => {
+          expect(recipe.numOfLikes).to.equal(recipes[0].numOfLikes - 1);
+          done();
+        });
+      });
+
+  });
+});
+
+describe('POST /user/:id/dislikeRecipe', () => {
+  it('should return a user with new disliked recipe', (done) => {
+    const recipe = {
+      _id: recipes[0]._id
+    };
+    const userId = users[0]._id;
+
+    request(app)   
+      .post(`/api/user/${userId}/dislikeRecipe`)
+      .send(recipe)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.user.dislikedRecipes).to.have.length(1);
+      })
+      .end((err, res) => {
+        Recipe.findById(recipes[0]._id).then((recipe) => {
+          expect(recipe.numOfDislikes).to.equal(recipes[0].numOfDislikes + 1);
+          done();
+        });
+      });
+  });
+});
+
+describe('POST /user/:id/undislikeRecipe', () => {
+  it('should return a user with remove disliked recipe', (done) => {
+    const recipe = {
+      _id: recipes[0]._id
+    };
+    const userId = users[0]._id;
+
+    request(app)   
+      .post(`/api/user/${userId}/undislikeRecipe`)
+      .send(recipe)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.user.dislikedRecipes).to.have.length(0);
+      })
+      .end((err, res) => {
+        Recipe.findById(recipes[0]._id).then((recipe) => {
+          expect(recipe.numOfDislikes).to.equal(recipes[0].numOfDislikes - 1);
+          done();
+        });
+      });
+
+  });
+});
+
+describe('DELETE /user/:userId/ingredient/:ingredientId', () => {
+  it('should return a user with deleted ingredient', (done) => {
+    request(app)
+      .delete(`/api/user/${users[0]._id}/ingredient/${ingredients[0]._id}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.user.ingredients).to.have.length(1);
+      })
+      .end(done);
+  });
+});
+
+describe('DELETE /user/:userId/favoriteRecipe/:recipeId', () => {
+  it('should return a user with deleted favorite recipe', (done) => {
+    request(app)
+      .delete(`/api/user/${users[0]._id}/favoriteRecipe/${recipes[0]._id}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.user.favoriteRecipes).to.have.length(1);
+      })
+      .end(done);
+  });
+});
+
 describe('Test addIngredientName functionality', () => {
   it('should return a new ingredient array with name property inside', (done) => {
     const ingredientTest = [
