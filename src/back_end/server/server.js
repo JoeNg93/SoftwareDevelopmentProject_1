@@ -53,13 +53,12 @@ const formidableConfig = (req, res, next) => {
 
 app.use(formidableConfig);
 
-app.get('*.js', (req, res, next) => {
+app.get('*/bundle.js', (req, res, next) => {
   req.url += '.gz';
   res.set('Content-Encoding', 'gzip');
   next();
 });
 
-// app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end', 'assets')));
 app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end', 'assets')));
 
 app.use(passport.initialize());
@@ -69,6 +68,8 @@ app.use('/api', api_router);
 app.use('/auth', auth_router);
 
 app.use('/webhook', webhook_router);
+
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', '..', 'front_end', 'index.html'));

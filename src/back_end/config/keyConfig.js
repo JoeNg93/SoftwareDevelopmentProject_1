@@ -6,5 +6,5 @@ module.exports = {
   CRYPTO_ALGORITHM: 'aes-256-cbc',
   FB_APP_ID: '272929786484880',
   FB_APP_SECRET: '7f8724d85bdba63e079fbbcf62e52256',
-  HOST_URL: 'http://localhost:8765'
+  HOST_URL: 'https://var-ingredient.joehub.fi'
 };
