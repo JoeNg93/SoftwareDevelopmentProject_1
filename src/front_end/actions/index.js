@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+import { HOST_URL } from './../../back_end/config/keyConfig';
 // const HOST_URL = 'https://var-ingredient.joehub.fi';
-const HOST_URL = 'http://localhost:8765';
+// const HOST_URL = 'http://localhost:8765';
 
 // RECIPE ACTION TYPES
 export const GET_RECIPES = 'GET_RECIPES';
@@ -75,10 +76,23 @@ export function getSortedRecipesWithIngredients(ingredients, sortKey, skip, limi
 }
 
 export function getTopThreeRecipes() {
-  const request = axios.get(`${HOST_URL}/api/recipes?sort=numOfLikes`);
+  const request = axios.get(`${HOST_URL}/api/recipes?sort=numOfLikes&limit=3`);
 
   return {
     type: GET_TOP_THREE_RECIPES,
+    payload: request
+  };
+}
+
+export function postRecipe(image, recipe) {
+  const formData = new FormData();
+  formData.append('image', image);
+  formData.append('recipe', JSON.stringify(recipe));
+
+  const request = axios.post(`${HOST_URL}/api/recipe`, formData);
+
+  return {
+    type: POST_RECIPE,
     payload: request
   };
 }
@@ -129,6 +143,15 @@ export function setSortKey(sortKey) {
   };
 }
 
+export function postIngredient(ingredientName, categoryID) {
+  const request = axios.post(`${HOST_URL}/api/ingredient`, { name: ingredientName, categoryID });
+
+  return {
+    type: POST_INGREDIENT,
+    payload: request
+  };
+}
+
 // CATEGORY ACTIONS
 export function getCategories() {
   const request = axios.get(`${HOST_URL}/api/categories`);
@@ -153,6 +176,15 @@ export function getIngredientsInCategoryWithId(categoryId) {
 
   return {
     type: GET_CATEGORY_ID_INGREDIENTS,
+    payload: request
+  };
+}
+
+export function postCategory(categoryName) {
+  const request = axios.post(`${HOST_URL}/api/category`, { name: categoryName });
+
+  return {
+    type: POST_CATEGORY,
     payload: request
   };
 }

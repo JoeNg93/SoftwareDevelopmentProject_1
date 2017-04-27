@@ -13,7 +13,7 @@ const { User } = require('./../models/users');
 
 const { ObjectID } = require('mongodb');
 
-const { MAILGUN_API_KEY } = require('./../config/keyConfig');
+const { MAILGUN_API_KEY, HOST_URL } = require('./../config/keyConfig');
 const mailgun = new Mailgun({ apiKey: MAILGUN_API_KEY, domain: 'mail.joehub.fi' });
 
 const { encrypt } = require('./../utils/auth');
@@ -80,7 +80,7 @@ router.get('/recipes', (req, res) => {
   const limit = Number(req.query.limit) || 0;
 
   Recipe.find().limit(limit).then((recipes) => {
-    res.send({ recipes: _.sortBy(sortKey)(recipes) });
+    res.send({ recipes: sortKey === 'numOfLikes' ? _.sortBy(sortKey)(recipes).reverse() : _.sortBy(sortKey)(recipes) });
   }).catch((err) => {
     res.status(400).send();
   });
@@ -357,7 +357,7 @@ router.post('/category', (req, res) => {
 // USER ROUTES
 
 function getUserPropertyForResponse(user) {
-  return _.pick(['_id', 'email', 'favoriteRecipes', 'ingredients', 'likedRecipes', 'dislikedRecipes', 'isAdmin'])(user);
+  return _.pick(['_id', 'email', 'favoriteRecipes', 'ingredients', 'likedRecipes', 'dislikedRecipes', 'isAdmin', 'facebook_id'])(user);
 }
 
 router.get('/users', (req, res) => {
@@ -660,8 +660,9 @@ router.post('/user/v1', (req, res) => {
 router.post('/user/v2', (req, res) => {
   const { email, password } = req.fields;
   const key = encrypt(`${email},${password}`);
-  const hostName = 'http://localhost:8765';
-  const urlPath = `${hostName}/auth/validate?key=${key}`;
+  // const hostName = 'http://localhost:8765';
+  // const hostName = 'https://var-ingredient.joehub.fi';
+  const urlPath = `${HOST_URL}/auth/validate?key=${key}`;
   ejs.renderFile(path.resolve(__dirname, '..', 'utils', 'email_form.ejs'), { url: urlPath }, (err, renderedHtmlString) => {
     const mail = new MailComposer({
       from: 'varIngredient <joe@mail.joehub.fi>',
@@ -684,6 +685,13 @@ router.post('/user/v2', (req, res) => {
       });
     });
   });
+});
+
+router.post('/test', (req, res) => {
+  const { fields, files } = req;
+  console.log(JSON.parse(fields.recipe));
+  console.log(files.image && files.image.path);
+  res.send();
 });
 
 module.exports = {

@@ -11,7 +11,7 @@ class Reviews extends Component {
                 </div>
                 <div className="row" id="card">
 
-                    <div className="col s4">
+                    <div className="col s11 m4">
                         <div className="card teal">
                             <div className="reviewText">
                                 <br />
@@ -32,7 +32,7 @@ class Reviews extends Component {
                         </div>
                     </div>
 
-                    <div className="col s4">
+                    <div className="col s11 m4">
                         <div className="card teal">
                             <div className="reviewText">
                                 <br />
@@ -53,7 +53,7 @@ class Reviews extends Component {
                         </div>
                     </div>
 
-                    <div className="col s4">
+                    <div className="col s11 m4">
                         <div className="card teal">
                             <div className="reviewText">
                             <br/>

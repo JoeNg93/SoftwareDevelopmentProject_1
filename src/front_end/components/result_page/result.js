@@ -28,7 +28,6 @@ class Result extends Component {
   }
 
   highlightCurrentPage(currentPage) {
-    console.log(`Current Page For Highlight: ${currentPage}`);
     $('.pagination').find(`li:contains(${currentPage})`).addClass('active');
   }
 
@@ -39,29 +38,27 @@ class Result extends Component {
   renderQueryRecipes() {
     const startIndex = (this.state.currentPage - 1) * 6;
     const endIndex = (this.state.currentPage) * 6;
-    console.log(`Start Index: ${startIndex}`);
-    console.log(`End Index: ${endIndex}`);
 
     const currentDisplayRecipes = this.props.queryRecipes.slice(startIndex, endIndex);
 
     if (currentDisplayRecipes.length) {
       return currentDisplayRecipes.map((recipe) => {
         return (
-          <div className="col s4" key={recipe._id}>
+          <div className="col s12 m4" key={recipe._id}>
             <div className="card">
               <div className="card-image">
-                <img src={`http://res.cloudinary.com/dicyn7jds/image/upload/c_scale,h_200,w_200/${recipe.image.versionId}/${recipe.image._id}.${recipe.image.imageType}`} />
+                <Link to={`/recipe/${recipe._id}`}>
+                  <img src={`http://res.cloudinary.com/dicyn7jds/image/upload/c_scale,h_200,w_200/${recipe.image.versionId}/${recipe.image._id}.${recipe.image.imageType}`} />
+                </Link>
               </div>
               <div className="card-content">
                 <ul>
+                  <li><h4><Link to={`/recipe/${recipe._id}`}>{recipe.name}</Link></h4></li>
                   <li># of Ingredients You Have: {this.getNumOfIngredientsHave(recipe)} / {recipe.totalIngredients}</li>
                   <li>Likes: {recipe.numOfLikes}</li>
                   <li>Dislikes: {recipe.numOfDislikes}</li>
                   {this.renderMissingIngredientsOfRecipe(recipe)}
                 </ul>
-              </div>
-              <div className="card-action">
-                <Link to={`/recipe/${recipe._id}`}>{recipe.name}</Link>
               </div>
             </div>
           </div>
@@ -79,7 +76,7 @@ class Result extends Component {
     const missingIngredientsName = _.map(missingIngredients, 'name');
     if (missingIngredientsName.length) {
       return (
-        <li className="missingIngredients">You Don't Have: { missingIngredientsName.toString() }</li>
+        <li className="missingIngredients">You Don't Have: {missingIngredientsName.toString()}</li>
       );
     }
   }
@@ -111,6 +108,7 @@ class Result extends Component {
   }
 
   onClickChangePage(currentPage) {
+    $('.pagination').find(`li:contains(${this.state.currentPage})`).removeClass('active');
     this.setState({ currentPage });
   }
 
@@ -127,7 +125,7 @@ class Result extends Component {
           <div className="container" id="results">
             <div className="col s12">
               <div className="row">
-                <div className="input-field col s4 offset-s8">
+                <div className="input-field col s12 m4 offset-m8">
                   <select id="filter">
                     <option value="numOfLikes" disabled>Choose your option</option>
                     <option value="numOfLikes" selected>Popularity</option>

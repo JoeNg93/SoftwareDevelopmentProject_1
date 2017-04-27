@@ -20,7 +20,7 @@ export default function (state = INITIAL_STATE, action) {
     case UNDISLIKE_RECIPE:
       return { ...state, currentRecipe: action.payload.data.recipe };
     case GET_TOP_THREE_RECIPES:
-      return { ...state, topThreeRecipes: action.payload.data.recipes.reverse() };
+      return { ...state, topThreeRecipes: action.payload.data.recipes };
     default:
       return state;
   }

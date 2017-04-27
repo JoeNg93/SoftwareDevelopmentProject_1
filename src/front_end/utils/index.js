@@ -5,11 +5,11 @@ import _ from 'lodash';
 
 const entities = new Entities();
 
-export const renderField = ({ input, label, type, meta: { touched, error } }) => {
+export const renderField = ({ input, label, type, className, meta: { touched, error } }) => {
   return (
     <div>
-      <label>{label}</label>
-      <input { ...input } type={type} />
+      {label && <label>{label}</label>}
+      <input { ...input } type={type} className={ className ? className : ''} />
       {touched && error && <span style={{ color: 'red', fontSize: '13px' }}>{error}</span>}
     </div>
   );

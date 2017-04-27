@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Footer extends Component {
   render() {
     return (
-      <footer id="homePageFooter" className="page-footer">
+      <footer id="homePageFooter" className="page-footer hide-on-small-only">
             <div className="footer-copyright">
                 <div className="container" style={{textAlign: "center"}}>
                     © 2017 Copyright

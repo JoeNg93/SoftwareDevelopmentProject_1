@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 
 import SideNav from './side_nav';
+import FavoriteRecipes from './favorite_recipes';
+
+import { connect } from 'react-redux';
+import { getUser } from './../../actions/index';
 
 class UserPage extends Component {
+  componentWillMount()  {
+    this.props.getUser();
+  }
+
   componentDidMount() {
     $('select').material_select();
     $('.button-collapse').sideNav();
@@ -15,9 +23,10 @@ class UserPage extends Component {
     return (
       <div id="userPageHtml">
         <SideNav />
+        <FavoriteRecipes />
       </div>
     );
   }
 }
 
-export default UserPage;
+export default connect(null, { getUser })(UserPage);

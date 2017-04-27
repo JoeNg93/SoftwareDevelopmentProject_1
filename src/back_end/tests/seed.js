@@ -1588,14 +1588,210 @@ const recipes = [
     ],
     numOfLikes: 1523,
     numOfDislikes: 30
+  },
+  {
+    _id: new ObjectID(),
+    name: "Test 1",
+    description: 'Fake description 1',
+    image: {
+      _id: 'd2syxoq3xatkj516r3wb',
+      versionId: 'v1491336195',
+      imageType: 'jpg'
+    },
+    ingredients: [
+      {
+        _id: ingredients[INGREDIENT_BACON]._id,
+        quantity: "500g",
+        name: ingredients[INGREDIENT_BACON].name
+      }
+    ],
+    cookingTime: 22,
+    numOfMeals: 4,
+    instructions: [
+      'Preheat oven to 400 degrees Fahrenheit',
+      'Place a sheet of parchment paper on a sheet pan',
+      'Lay the bacon on top of the parchment paper',
+      'Bake for 15 to 20 mins until the bacon is really crispy',
+      'Drain on paper towels and server'
+    ],
+    numOfLikes: 2000,
+    numOfDislikes: 50
+  },
+  {
+    _id: new ObjectID(),
+    name: "Test 2",
+    description: 'Fake description 1',
+    image: {
+      _id: 'd2syxoq3xatkj516r3wb',
+      versionId: 'v1491336195',
+      imageType: 'jpg'
+    },
+    ingredients: [
+      {
+        _id: ingredients[INGREDIENT_BACON]._id,
+        quantity: "500g",
+        name: ingredients[INGREDIENT_BACON].name
+      }
+    ],
+    cookingTime: 22,
+    numOfMeals: 4,
+    instructions: [
+      'Preheat oven to 400 degrees Fahrenheit',
+      'Place a sheet of parchment paper on a sheet pan',
+      'Lay the bacon on top of the parchment paper',
+      'Bake for 15 to 20 mins until the bacon is really crispy',
+      'Drain on paper towels and server'
+    ],
+    numOfLikes: 2000,
+    numOfDislikes: 50
+  },
+  {
+    _id: new ObjectID(),
+    name: "Test 3",
+    description: 'Fake description 1',
+    image: {
+      _id: 'd2syxoq3xatkj516r3wb',
+      versionId: 'v1491336195',
+      imageType: 'jpg'
+    },
+    ingredients: [
+      {
+        _id: ingredients[INGREDIENT_BACON]._id,
+        quantity: "500g",
+        name: ingredients[INGREDIENT_BACON].name
+      }
+    ],
+    cookingTime: 22,
+    numOfMeals: 4,
+    instructions: [
+      'Preheat oven to 400 degrees Fahrenheit',
+      'Place a sheet of parchment paper on a sheet pan',
+      'Lay the bacon on top of the parchment paper',
+      'Bake for 15 to 20 mins until the bacon is really crispy',
+      'Drain on paper towels and server'
+    ],
+    numOfLikes: 2000,
+    numOfDislikes: 50
+  },
+  {
+    _id: new ObjectID(),
+    name: "Test 4",
+    description: 'Fake description 1',
+    image: {
+      _id: 'd2syxoq3xatkj516r3wb',
+      versionId: 'v1491336195',
+      imageType: 'jpg'
+    },
+    ingredients: [
+      {
+        _id: ingredients[INGREDIENT_BACON]._id,
+        quantity: "500g",
+        name: ingredients[INGREDIENT_BACON].name
+      }
+    ],
+    cookingTime: 22,
+    numOfMeals: 4,
+    instructions: [
+      'Preheat oven to 400 degrees Fahrenheit',
+      'Place a sheet of parchment paper on a sheet pan',
+      'Lay the bacon on top of the parchment paper',
+      'Bake for 15 to 20 mins until the bacon is really crispy',
+      'Drain on paper towels and server'
+    ],
+    numOfLikes: 2000,
+    numOfDislikes: 50
+  },
+  {
+    _id: new ObjectID(),
+    name: "Test 5",
+    description: 'Fake description 1',
+    image: {
+      _id: 'd2syxoq3xatkj516r3wb',
+      versionId: 'v1491336195',
+      imageType: 'jpg'
+    },
+    ingredients: [
+      {
+        _id: ingredients[INGREDIENT_BACON]._id,
+        quantity: "500g",
+        name: ingredients[INGREDIENT_BACON].name
+      }
+    ],
+    cookingTime: 22,
+    numOfMeals: 4,
+    instructions: [
+      'Preheat oven to 400 degrees Fahrenheit',
+      'Place a sheet of parchment paper on a sheet pan',
+      'Lay the bacon on top of the parchment paper',
+      'Bake for 15 to 20 mins until the bacon is really crispy',
+      'Drain on paper towels and server'
+    ],
+    numOfLikes: 2000,
+    numOfDislikes: 50
+  },
+  {
+    _id: new ObjectID(),
+    name: "Test 6",
+    description: 'Fake description 1',
+    image: {
+      _id: 'd2syxoq3xatkj516r3wb',
+      versionId: 'v1491336195',
+      imageType: 'jpg'
+    },
+    ingredients: [
+      {
+        _id: ingredients[INGREDIENT_BACON]._id,
+        quantity: "500g",
+        name: ingredients[INGREDIENT_BACON].name
+      }
+    ],
+    cookingTime: 22,
+    numOfMeals: 4,
+    instructions: [
+      'Preheat oven to 400 degrees Fahrenheit',
+      'Place a sheet of parchment paper on a sheet pan',
+      'Lay the bacon on top of the parchment paper',
+      'Bake for 15 to 20 mins until the bacon is really crispy',
+      'Drain on paper towels and server'
+    ],
+    numOfLikes: 2000,
+    numOfDislikes: 50
+  },
+  {
+    _id: new ObjectID(),
+    name: "Test 7",
+    description: 'Fake description 1',
+    image: {
+      _id: 'd2syxoq3xatkj516r3wb',
+      versionId: 'v1491336195',
+      imageType: 'jpg'
+    },
+    ingredients: [
+      {
+        _id: ingredients[INGREDIENT_BACON]._id,
+        quantity: "500g",
+        name: ingredients[INGREDIENT_BACON].name
+      }
+    ],
+    cookingTime: 22,
+    numOfMeals: 4,
+    instructions: [
+      'Preheat oven to 400 degrees Fahrenheit',
+      'Place a sheet of parchment paper on a sheet pan',
+      'Lay the bacon on top of the parchment paper',
+      'Bake for 15 to 20 mins until the bacon is really crispy',
+      'Drain on paper towels and server'
+    ],
+    numOfLikes: 2000,
+    numOfDislikes: 50
   }
 ];
 
 const users = [
   {
     _id: new ObjectID(),
-    email: 'ntuandungzz@gmail.com',
-    password: bcrypt.hashSync('test1', salt),
+    email: 'var-ingredient@mail.joehub.fi',
+    password: bcrypt.hashSync('var-ingredient', salt),
     favoriteRecipes: [
       {
         _id: recipes[0]._id,
@@ -1615,7 +1811,8 @@ const users = [
         _id: ingredients[1]._id,
         name: ingredients[1].name
       }
-    ]
+    ],
+    isAdmin: true
   },
   {
     _id: new ObjectID(),

@@ -7,6 +7,9 @@ const formidable = require('formidable');
 const Mailgun = require('mailgun-js');
 const MailComposer = require('nodemailer/lib/mail-composer');
 const cors = require('cors');
+const passport = require('passport');
+
+// const FB_LOGIN_CALLBACK_URL = 'http://localhost:8765/auth/facebook/callback';
 
 const { SESSION_KEY } = require('./../config/keyConfig');
 
@@ -15,6 +18,8 @@ const { api_router } = require('./../routers/api_router');
 const { auth_router } = require('./../routers/auth_router');
 
 const { webhook_router } = require('./../routers/webhook_router');
+
+const { User } = require('./../models/users');
 
 const app = express();
 
@@ -50,6 +55,10 @@ app.use(formidableConfig);
 
 // app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end', 'assets')));
 app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end', 'assets')));
+
+app.use(passport.initialize());
+
+
 
 app.use('/api', api_router);
 

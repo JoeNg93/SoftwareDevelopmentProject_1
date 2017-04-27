@@ -21,12 +21,18 @@ class NavBar extends Component {
           </li>
           <li><Link className="waves-effect waves-light btn teal" to={`/user/${this.props.currentUser._id}`}><i
             className="material-icons left">shopping_basket</i>My Pantry</Link></li>
+          {this.props.currentUser.isAdmin && (
+            <li><a className="waves-effect waves-light btn teal" href="/admin"><i
+              className="material-icons left">assignment_ind</i>Admin Panel</a></li>
+          )}
         </span>
       );
     } else {
       return (
         <span>
           <li><a className="waves-effect waves-light btn teal" href="#loginModal"><i className="material-icons left">perm_identity</i>Login</a>
+          </li>
+          <li><a className="waves-effect waves-light btn teal" href="/auth/facebook"><i className="material-icons left">perm_identity</i>Facebook Login</a>
           </li>
           <li><a className="waves-effect waves-light btn teal" href="#signupModal"><i
             className="material-icons left">subtitles</i>Sign-up</a></li>

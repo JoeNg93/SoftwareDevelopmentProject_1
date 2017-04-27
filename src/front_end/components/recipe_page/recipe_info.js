@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { likeRecipe, unlikeRecipe, dislikeRecipe, undislikeRecipe, getUser } from './../../actions/index';
+import { Link } from 'react-router-dom';
+import {
+  likeRecipe,
+  unlikeRecipe,
+  dislikeRecipe,
+  undislikeRecipe,
+  getUser,
+  postUserFavoriteRecipe
+} from './../../actions/index';
 
 
 class RecipeInfo extends Component {
@@ -17,6 +25,12 @@ class RecipeInfo extends Component {
     super(props);
     this.greyColor = '#9e9e9e';
     this.blueColor = '#01579b';
+    this.state = {
+      modalMessage: '',
+      displayModalFooter: true,
+      modalHeader: ''
+    };
+    this.modalDisplayTime = 1000;
   }
 
   renderDirectionsInRecipe(recipe) {
@@ -47,6 +61,7 @@ class RecipeInfo extends Component {
         this.props.likeRecipe(this.props.currentUser._id, this.props.recipe._id);
       }
     } else {
+      this.setState({ modalMessage: 'Please login to like this recipe', displayModalFooter: true, modalHeader: 'Warning' });
       $('#likeDislikeModalRecipePage').modal('open');
     }
   }
@@ -68,6 +83,7 @@ class RecipeInfo extends Component {
         this.props.dislikeRecipe(this.props.currentUser._id, this.props.recipe._id);
       }
     } else {
+      this.setState({ modalMessage: 'Please login to dislike this recipe', displayModalFooter: true, modalHeader: 'Warning' });
       $('#likeDislikeModalRecipePage').modal('open');
     }
   }
@@ -75,8 +91,45 @@ class RecipeInfo extends Component {
   onClickAddRecipeFavorite(e) {
     if (this.props.currentUser) {
 
+      if (this.props.currentUser.favoriteRecipes.find(recipe => recipe._id === this.props.recipe._id)) {
+        this.setState({ modalMessage: 'This recipe is already in your favorite', modalHeader: 'Failed', displayModalFooter: false });
+        $('#likeDislikeModalRecipePage').modal('open');
+        setTimeout(function () {
+          $('#likeDislikeModalRecipePage').modal('close');
+        }, this.modalDisplayTime);
+        return;
+      }
+      this.props.postUserFavoriteRecipe(this.props.currentUser._id, this.props.recipe._id, this.props.recipe.name)
+        .then(() => {
+          this.setState({ modalMessage: 'Added to your favorite recipes', displayModalFooter: false, modalHeader: 'Success' });
+          $('#likeDislikeModalRecipePage').modal('open');
+          setTimeout(function () {
+            $('#likeDislikeModalRecipePage').modal('close');
+          }, this.modalDisplayTime);
+        });
+
     } else {
-      $('#likeDislikeModalRecipePage').modal('open');
+      this.setState({ modalMessage: 'Please login to add this recipe to your favorite', displayModalFooter: true, modalHeader: 'Warning' });
+      $('#likeDislikeModalRecipePage').modal('open')
+    }
+  }
+
+  renderModalFooter() {
+    if (this.state.displayModalFooter) {
+      return (
+        <div className="modal-footer">
+          <div className="row">
+            <div className="col s2 offset-s5">
+              <Link to="/" className="modal-action modal-close waves-effect waves-default btn"
+                style={{ backgroundColor: '#307197' }}>
+                Homepage
+                </Link>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return <div></div>;
     }
   }
 
@@ -97,19 +150,19 @@ class RecipeInfo extends Component {
                   <span id="titleSpan">
                     <h6>Like this Recipe?</h6>
                     <div className="row">
-                      <div className="col s3 offset-s3 center">
+                      <div className="col s6 m3 offset-m3 center">
                         <h5>{recipe.numOfLikes}</h5>
                       </div>
-                      <div className="col s3 center">
+                      <div className="col s6 m3 center">
                         <h5>{recipe.numOfDislikes}</h5>
                       </div>
 
-                      <div className="col s3 offset-s3 center">
+                      <div className="col s6 m3 offset-m3 center">
                         <a href="#!" onClick={this.onClickLikeRecipe.bind(this)}>
                           <i className="material-icons medium" style={{ color: this.props.currentUser && this.props.currentUser.likedRecipes.indexOf(recipe._id) != -1 ? this.blueColor : this.greyColor }}>thumb_up</i>
                         </a>
                       </div>
-                      <div className="col s3 center">
+                      <div className="col s6 m3 center">
                         <a href="#!" onClick={this.onClickDislikeRecipe.bind(this)}>
                           <i className="material-icons medium" style={{ color: this.props.currentUser && this.props.currentUser.dislikedRecipes.indexOf(recipe._id) != -1 ? this.blueColor : this.greyColor }}>thumb_down</i>
                         </a>
@@ -158,40 +211,30 @@ class RecipeInfo extends Component {
             <div className="modal-content center">
               <div className="row">
                 <div className="col s6 offset-s3">
-                  <h3>Warning</h3>
+                  <h2 className="red-text text-darken-1">{this.state.modalHeader}</h2>
                 </div>
               </div>
               <hr />
               <div className="row">
-                <p>Please back to home page and login to like/dislike/add favorite this recipe</p>
+                { this.state.modalHeader === 'Success' && <i className="material-icons large">done</i> }
+                <h5>{this.state.modalMessage}</h5>
               </div>
             </div>
-            <div className="modal-footer center">
-              <div className="row">
-                <div className="col s6 offset-s3">
-                  <a href="/" class="modal-action modal-close waves-effect waves-default btn">Back To Homepage</a>
-                </div>
-              </div>
-            </div>
+
+            {this.renderModalFooter()}
+
           </div>
 
-          <div id="addRecipeFavoriteModalRecipePage" className="modal">
+          <div id="addedFavoriteRecipeModal" className="modal">
             <div className="modal-content center">
               <div className="row">
                 <div className="col s6 offset-s3">
-                  <h3>Warning</h3>
+                  <h3>Success</h3>
                 </div>
               </div>
               <hr />
               <div className="row">
-                <p>Please back to home page and login to add this recipe to favorites</p>
-              </div>
-            </div>
-            <div className="modal-footer center">
-              <div className="row">
-                <div className="col s6 offset-s3">
-                  <a href="/" class="modal-action modal-close waves-effect waves-default btn">Back To Homepage</a>
-                </div>
+                <p>Added to your favorite recipes</p>
               </div>
             </div>
           </div>
@@ -207,40 +250,29 @@ class RecipeInfo extends Component {
             <div className="modal-content center">
               <div className="row">
                 <div className="col s6 offset-s3">
-                  <h3>Warning</h3>
+                  <h3>{this.state.modalHeader}</h3>
                 </div>
               </div>
               <hr />
               <div className="row">
-                <p>Please back to home page and login to like/dislike/add favorite this recipe</p>
+                <h5>{this.state.modalMessage}</h5>
               </div>
             </div>
-            <div className="modal-footer center">
-              <div className="row">
-                <div className="col s6 offset-s3">
-                  <a href="/" class="modal-action modal-close waves-effect waves-default btn">Back To Homepage</a>
-                </div>
-              </div>
-            </div>
+
+            {this.renderModalFooter()}
+
           </div>
 
-          <div id="addRecipeFavoriteModalRecipePage" className="modal">
+          <div id="addedFavoriteRecipeModal" className="modal">
             <div className="modal-content center">
               <div className="row">
                 <div className="col s6 offset-s3">
-                  <h3>Warning</h3>
+                  <h3>Success</h3>
                 </div>
               </div>
               <hr />
               <div className="row">
-                <p>Please back to home page and login to add this recipe to favorites</p>
-              </div>
-            </div>
-            <div className="modal-footer center">
-              <div className="row">
-                <div className="col s6 offset-s3">
-                  <a href="/" class="modal-action modal-close waves-effect waves-default btn">Back To Homepage</a>
-                </div>
+                <p>Added to your favorite recipes</p>
               </div>
             </div>
           </div>
@@ -258,4 +290,13 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { likeRecipe, unlikeRecipe, dislikeRecipe, undislikeRecipe, getUser })(RecipeInfo);
+const dispachActions = {
+  likeRecipe,
+  unlikeRecipe,
+  dislikeRecipe,
+  undislikeRecipe,
+  getUser,
+  postUserFavoriteRecipe
+};
+
+export default connect(mapStateToProps, dispachActions)(RecipeInfo);

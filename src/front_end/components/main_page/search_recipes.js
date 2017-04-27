@@ -33,12 +33,12 @@ class SearchRecipes extends Component {
       <section id="home" className="section scrollspy">
         <div className="row">
 
-          <div className="col s6 offset-s3 element">
+          <div className="col s11 m6 offset-m3 element">
 
             <div className="input-field col s12" id="chips">
               <Chips suggestions={this.state.ingredientSuggestions} value={this.state.queryIngredients} onChange={this.onChangeSearchBar.bind(this)} fromSuggestionsOnly placeholder="What ingredients do you have?.."/>
             </div>
-            <div className="col s6 offset-s3">
+            <div className="col s8 offset-s2 m6 offset-m3">
               <button className="waves-effect waves-light btn teal" id="homeSearch" onClick={this.submitIngredientsQuery.bind(this)}>Search</button>
             </div>
 

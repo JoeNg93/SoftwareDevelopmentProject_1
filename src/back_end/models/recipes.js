@@ -6,7 +6,8 @@ const RecipeSchema = new mongoose.Schema({
     required: true
   },
   description: {
-    type: String
+    type: String,
+    default: ''
   },
   image: {
     _id: String,
@@ -23,8 +24,14 @@ const RecipeSchema = new mongoose.Schema({
   cookingTime: Number,
   numOfMeals: Number,
   instructions: [String],
-  numOfLikes: Number,
-  numOfDislikes: Number
+  numOfLikes: {
+    type: Number,
+    default: 0
+  },
+  numOfDislikes: {
+    type: Number,
+    default: 0
+  }
 });
 
 RecipeSchema.statics.findByIngredients = function (ingredients, skip, limit) {

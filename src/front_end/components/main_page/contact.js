@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Contact extends Component {
   render() {
     return (
-      <section id="contact" className="section scrollspy">
+      <section id="contact" className="section scrollspy hide-on-small-only">
         <div className="row">
           <div className="col s12">
             <h3>Contact Us</h3>
@@ -14,14 +14,14 @@ class Contact extends Component {
 
           <div className="row">
             <div className="col s12">
-              <div className="col s4" id="contactUsHeader">
+              <div className="col s12 m4" id="contactUsHeader">
                 <h5>
                   For general questions feel free to send us a message!
                             </h5>
                 <hr id="contactHr" />
               </div>
 
-              <div className="col s4 offset-s4" id="recipeRequest">
+              <div className="col s12 m4 offset-m4" id="recipeRequest">
                 <h5>Have a good recipe? Click the button and fill out the form to get it added!</h5>
                 <a className="waves-effect waves-light btn" href="#recipeModal">Add Recipe</a>
 
@@ -176,20 +176,20 @@ class Contact extends Component {
           <div className="row" id="contactInputs">
 
             <div className="row">
-              <div className="input-field col s4">
+              <div className="input-field col s12 m4">
                 <input id="contactEmail" type="email" className="validate" />
                 <label htmlFor="contactEmail" data-error="Please try again." data-success="">Email</label>
               </div>
             </div>
 
             <div className="row">
-              <div className="input-field col s4">
+              <div className="input-field col s12 m4">
                 <textarea id="messageText" className="materialize-textarea" required="required"></textarea>
                 <label htmlFor="messageText">Message</label>
               </div>
             </div>
             <div className="row">
-              <div className="col s4">
+              <div className="col s12 m4">
                 <button id="sendMessage" className="btn waves-effect waves-light valign-wrapper" type="submit"
                   name="action">Send
                                 Message

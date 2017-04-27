@@ -7,7 +7,7 @@ const { JWT_KEY } = require('./../config/keyConfig');
 const UserSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true,
+    // required: true,
     trim: true,
     minlength: 1,
     unique: true,
@@ -18,9 +18,10 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    // required: true,
     minlength: 6
   },
+  facebook_id: String,
   tokens: [
     {
       access: {

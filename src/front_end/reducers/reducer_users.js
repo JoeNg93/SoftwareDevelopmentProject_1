@@ -1,4 +1,16 @@
-import { LOGIN, LIKE_RECIPE, UNLIKE_RECIPE, DISLIKE_RECIPE, UNDISLIKE_RECIPE, GET_USER, POST_USER_ID_FAVORITE_RECIPE, POST_USER_ID_INGREDIENT, DELETE_USER_ID_FAVORITE_RECIPE, DELETE_USER_ID_INGREDIENT } from './../actions/index';
+import { 
+  LOGIN, 
+  LIKE_RECIPE, 
+  UNLIKE_RECIPE, 
+  DISLIKE_RECIPE, 
+  UNDISLIKE_RECIPE, 
+  GET_USER, 
+  POST_USER_ID_FAVORITE_RECIPE, 
+  POST_USER_ID_INGREDIENT, 
+  DELETE_USER_ID_FAVORITE_RECIPE, 
+  DELETE_USER_ID_INGREDIENT,
+  GET_USERS
+ } from './../actions/index';
 
 const INITIAL_STATE = {
   currentUser: null,
@@ -7,6 +19,8 @@ const INITIAL_STATE = {
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
+    case GET_USERS: 
+      return { ...state, allUsers: action.payload.data.users };
     case LOGIN:
     case GET_USER:
     case LIKE_RECIPE:

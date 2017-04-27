@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { getCategories, getIngredients, getUser, postUserIngredient, deleteUserIngredient } from './../../actions/index';
+import { withRouter, Link } from 'react-router-dom';
+
+import {
+  getCategories,
+  getIngredients,
+  postUserIngredient,
+  deleteUserIngredient,
+  clearQueryIngredients,
+  addQueryIngredients
+} from './../../actions/index';
+
 import _ from 'lodash';
 
 
 class SideNav extends Component {
   componentWillMount() {
-    this.props.getUser().then(() => {
-      if (!this.props.currentUser) {
-        this.props.history.push('/');
-        return;
-      }
-      this.props.getCategories();
-      this.props.getIngredients();
-    })
-
+    this.props.getCategories();
+    this.props.getIngredients();
   }
 
   componentDidUpdate() {
+    if (!this.props.currentUser) {
+      this.props.history.push('/');
+      return;
+    }
     _.map(this.props.currentUser.ingredients, 'name').forEach(ingredientName => this.checkIngredientCheckbox(ingredientName));
   }
 
@@ -66,22 +72,27 @@ class SideNav extends Component {
   }
 
   renderMyIngredients() {
-    return _.map(this.props.currentUser.ingredients, 'name').map((ingredientName) => {
-      return (
-        <li className="collection-item" id={ingredientName}>
-          <div>
-            {ingredientName}<a href="#!" className="secondary-content" onClick={this.onClickRemoveIngredient.bind(this)}><i className="material-icons" id={ingredientName}>delete</i></a>
-          </div>
-        </li>
-      );
-    });
+    if (this.props.currentUser) {
+      return _.map(this.props.currentUser.ingredients, 'name').map((ingredientName) => {
+        return (
+          <li className="collection-item" id={ingredientName}>
+            <div>
+              {ingredientName}<a href="#!" className="secondary-content" onClick={this.onClickRemoveIngredient.bind(this)}><i className="material-icons" id={ingredientName}>delete</i></a>
+            </div>
+          </li>
+        );
+      });
+    } else {
+      return <div></div>;
+    }
   }
 
   onClickRemoveIngredient(e) {
     const removeIngredientName = $(e.target).attr('id');
     const removeIngredientId = this.props.currentUser.ingredients.find(ingredient => ingredient.name === removeIngredientName)._id;
-    this.uncheckIngredientCheckbox(removeIngredientName);
-    this.props.deleteUserIngredient(this.props.currentUser._id, removeIngredientId, removeIngredientName);
+
+    this.props.deleteUserIngredient(this.props.currentUser._id, removeIngredientId, removeIngredientName)
+      .then(() => this.uncheckIngredientCheckbox(removeIngredientName));
   }
 
   uncheckIngredientCheckbox(ingredientName) {
@@ -96,7 +107,10 @@ class SideNav extends Component {
 
   // NEED TO FIX
   onClickSearchAgain(e) {
-    this.props.getSortedRecipesWithIngredients(this.props.queryIngredients, this.props.sortKey, 0, 0);
+    this.props.clearQueryIngredients();
+    const ingredientNames = _.map(this.props.currentUser.ingredients, 'name');
+    this.props.addQueryIngredients(...ingredientNames);
+    this.props.history.push('/result');
   }
 
   render() {
@@ -107,25 +121,20 @@ class SideNav extends Component {
           <nav className="top-nav teal hide-on-large-only">
             <div className="container">
               <div className="nav-wrapper">
-                <a href="/" className="brand-logo">
+                <Link to="/" className="brand-logo">
                   <span className="topNavBrandNameVar">var</span>
                   <span className="topNavBrandNameIngredient">Ingredient</span>
-                </a>
+                </Link>
                 <a href="#" data-activates="nav-mobile" className="button-collapse"><i
                   className="material-icons" id="smallNavMenuSearch">menu</i></a>
               </div>
             </div>
           </nav>
 
-
-          <div className="container">
-            <a href="#" data-activates="nav-mobile" className="button-collapse side-nav full hide-on-large-only"><i
-              className="material-icons">menu</i></a>
-          </div>
           <ul id="nav-mobile" className="side-nav fixed">
-            <li className="logo fill"><a id="logo-container" href="/"><img src="http://res.cloudinary.com/rwbarker/image/upload/c_scale,h_300,w_300/v1492503178/logo_final_bxjwsl.png" /></a></li>
-            <li className="center"><a href="/" className="waves-effect waves-orange navlinks home">Home</a></li>
-            <li className="center"><a href="#!" className="waves-effect waves-orange navlinks updateSearch" onClick={this.onClickSearchAgain.bind(this)}><i className="material-icons">search</i></a></li>
+            <li className="logo fill"><Link id="logo-container" to="/"><img src="http://res.cloudinary.com/rwbarker/image/upload/c_scale,h_300,w_300/v1492503178/logo_final_bxjwsl.png" /></Link></li>
+            <li className="center"><Link to="/" className="waves-effect waves-orange navlinks home">Home</Link></li>
+            <li className="center"><a href="#!" className="waves-effect waves-orange navlinks updateSearch" onClick={this.onClickSearchAgain.bind(this)}><i className="material-icons">search</i> New Search</a></li>
             <li className="divider"></li>
             <li className="center searchIngredients">
               My Ingredients
@@ -157,4 +166,13 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, { getCategories, getIngredients, getUser, postUserIngredient, deleteUserIngredient })(SideNav));
+const dispatchActions = {
+  getCategories,
+  getIngredients,
+  postUserIngredient,
+  deleteUserIngredient,
+  clearQueryIngredients,
+  addQueryIngredients
+};
+
+export default withRouter(connect(mapStateToProps, dispatchActions)(SideNav));

@@ -114,11 +114,6 @@ class SideNav extends Component {
             </div>
           </nav>
 
-
-          <div className="container">
-            <a href="#" data-activates="nav-mobile" className="button-collapse side-nav full hide-on-large-only"><i
-              className="material-icons">menu</i></a>
-          </div>
           <ul id="nav-mobile" className="side-nav fixed">
             <li className="logo fill"><Link id="logo-container" to="/"><img src="http://res.cloudinary.com/rwbarker/image/upload/c_scale,h_300,w_300/v1492503178/logo_final_bxjwsl.png" /></Link></li>
             <li className="center"><Link to="/" className="waves-effect waves-orange navlinks home">Home</Link></li>
@@ -126,7 +121,7 @@ class SideNav extends Component {
             <li className="center"><a href="#!" className="waves-effect waves-orange navlinks updateSearch" onClick={this.onClickSearchAgain.bind(this)}><i className="material-icons">search</i></a></li>
             <li className="divider"></li>
             <li className="center searchIngredients">
-              My Ingredients
+              Query Ingredients
             <ul className="collection center">
                 {this.renderQueryIngredients()}
               </ul>
@@ -143,18 +138,21 @@ class SideNav extends Component {
           <div className="modal-content center">
             <div className="row">
               <div className="col s6 offset-s3">
-                <h3>Warning</h3>
+                <h2 className="red-text text-darken-1">Warning</h2>
               </div>
             </div>
             <hr />
             <div className="row">
-              <p>Please back to home page and login to check your Pantry</p>
+              <h5>Please back to home page and login to check your Pantry</h5>
             </div>
           </div>
-          <div className="modal-footer center">
+          <div className="modal-footer">
             <div className="row">
-              <div className="col s6 offset-s3">
-                <a href="/" class="modal-action modal-close waves-effect waves-default btn">Back To Homepage</a>
+              <div className="col s2 offset-s5">
+                <Link to="/" className="modal-action modal-close waves-effect waves-default btn"
+                  style={{ backgroundColor: '#307197' }}>
+                Homepage
+                </Link>
               </div>
             </div>
           </div>
