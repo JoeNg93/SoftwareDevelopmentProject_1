@@ -53,12 +53,16 @@ const formidableConfig = (req, res, next) => {
 
 app.use(formidableConfig);
 
+app.get('*.js', (req, res, next) => {
+  req.url += '.gz';
+  res.set('Content-Encoding', 'gzip');
+  next();
+});
+
 // app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end', 'assets')));
 app.use(express.static(path.resolve(__dirname, '..', '..', 'front_end', 'assets')));
 
 app.use(passport.initialize());
-
-
 
 app.use('/api', api_router);
 
