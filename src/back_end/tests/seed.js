@@ -1444,7 +1444,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: "Barefoot Contessa's Oven Roasted Bacon",
-    description: 'Fake description 1',
+    description: "This is the best way to cook bacon. It cooks more evenly this way and more importantly, it requires little attention. The most wonderful part is you don't have grease spatters on your stove!",
     image: {
       _id: 'd2syxoq3xatkj516r3wb',
       versionId: 'v1491336195',
@@ -1453,7 +1453,7 @@ const recipes = [
     ingredients: [
       {
         _id: ingredients[INGREDIENT_BACON]._id,
-        quantity: "500g",
+        quantity: "300g",
         name: ingredients[INGREDIENT_BACON].name
       }
     ],
@@ -1472,7 +1472,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: "Captain Blue's Grill-Roasted Onions",
-    description: 'Fake description 2',
+    description: "The onion, steamed in its own juices, comes out very mild and sweet. Prep time refers to the slicing time after they're done cooking. And, careful, they're slippery...",
     image: {
       _id: 'yktrqrqsmlrf2ct5eca2',
       versionId: 'v1491336210',
@@ -1481,7 +1481,7 @@ const recipes = [
     ingredients: [
       {
         _id: ingredients[INGREDIENT_ONION]._id,
-        quantity: "100g",
+        quantity: "1",
         name: ingredients[INGREDIENT_ONION].name
       }
     ],
@@ -1495,13 +1495,13 @@ const recipes = [
       'Slice/ chop the onions and toss with seasonings.',
       '(We serve them over buttered baked potatoes and top with grated cheddar cheese, fresh ground pepper and Tabasco. We stick a clean, food-use-only non-anodized aluminum nail or tent stake through the stem / tail ends of the onion before it goes on the grill. We find that it helps with even heat distribution - it works great for potatoes too.)'
     ],
-    numOfLikes: 932,
+    numOfLikes: 765,
     numOfDislikes: 30
   },
   {
     _id: new ObjectID(),
     name: 'Boiled Eggs',
-    description: 'Fake description 3',
+    description: 'These Hard boiled eggs taste great and are a good accompaniment to salads and appetizers',
     image: {
       _id: 'c23rhh7jdphrv9srea8a',
       versionId: 'v1491336203',
@@ -1527,7 +1527,7 @@ const recipes = [
   {
     _id: new ObjectID(),
     name: 'Chive Oil',
-    description: 'Fake description 4',
+    description: 'Flavored oils are a great way to add extra punch to all sorts of dishes, but store-bought bottles tend to be pretty pricey and, when bought for specific recipes, can often end up gathering dust',
     image: {
       _id: 'swe1h5phbi1g2bljbthc',
       versionId: 'v1491336217',
@@ -1536,254 +1536,24 @@ const recipes = [
     ingredients: [
       {
         _id: ingredients[INGREDIENT_CHIVE]._id,
-        quantity: "100g",
+        quantity: "120g",
         name: ingredients[INGREDIENT_CHIVE].name
       },
       {
         _id: ingredients[INGREDIENT_OLIVE_OIL]._id,
-        quantity: "100ml",
+        quantity: "300g",
         name: ingredients[INGREDIENT_OLIVE_OIL].name
       }
     ],
-    cookingTime: 10,
+    cookingTime: 20,
     numOfMeals: 2,
     instructions: [
       'Set a coffee filter in a sieve set over a heatproof measuring cup or bowl',
       'Purée chives and oil in a blender until well blended. Transfer to a small saucepan and cook over medium-high heat, stirring occasionally, until mixture is sizzling, about 3 minutes',
       'Remove chive oil from heat and strain though prepared sieve (do not press on solids or oil will be cloudy); let cool'
     ],
-    numOfLikes: 5612,
-    numOfDislikes: 125
-  },
-  {
-    _id: new ObjectID(),
-    name: 'Things that have both eggs and onion',
-    description: 'Fake description 5',
-    image: {
-      _id: 'vqkcn3r180xzc5aikh9e',
-      versionId: 'v1491336232',
-      imageType: 'jpg'
-    },
-    ingredients: [
-      {
-        _id: ingredients[INGREDIENT_EGGS]._id,
-        quantity: "3",
-        name: ingredients[INGREDIENT_EGGS].name
-      },
-      {
-        _id: ingredients[INGREDIENT_ONION]._id,
-        quantity: "100g",
-        name: ingredients[INGREDIENT_ONION].name
-      },
-      {
-        _id: ingredients[INGREDIENT_BACON]._id,
-        quantity: "200g",
-        name: ingredients[INGREDIENT_BACON].name
-      }
-    ],
-    cookingTime: 10,
-    numOfMeals: 2,
-    instructions: [
-      'Ask your girlfriend'
-    ],
-    numOfLikes: 1523,
-    numOfDislikes: 30
-  },
-  {
-    _id: new ObjectID(),
-    name: "Test 1",
-    description: 'Fake description 1',
-    image: {
-      _id: 'd2syxoq3xatkj516r3wb',
-      versionId: 'v1491336195',
-      imageType: 'jpg'
-    },
-    ingredients: [
-      {
-        _id: ingredients[INGREDIENT_BACON]._id,
-        quantity: "500g",
-        name: ingredients[INGREDIENT_BACON].name
-      }
-    ],
-    cookingTime: 22,
-    numOfMeals: 4,
-    instructions: [
-      'Preheat oven to 400 degrees Fahrenheit',
-      'Place a sheet of parchment paper on a sheet pan',
-      'Lay the bacon on top of the parchment paper',
-      'Bake for 15 to 20 mins until the bacon is really crispy',
-      'Drain on paper towels and server'
-    ],
-    numOfLikes: 2000,
-    numOfDislikes: 50
-  },
-  {
-    _id: new ObjectID(),
-    name: "Test 2",
-    description: 'Fake description 1',
-    image: {
-      _id: 'd2syxoq3xatkj516r3wb',
-      versionId: 'v1491336195',
-      imageType: 'jpg'
-    },
-    ingredients: [
-      {
-        _id: ingredients[INGREDIENT_BACON]._id,
-        quantity: "500g",
-        name: ingredients[INGREDIENT_BACON].name
-      }
-    ],
-    cookingTime: 22,
-    numOfMeals: 4,
-    instructions: [
-      'Preheat oven to 400 degrees Fahrenheit',
-      'Place a sheet of parchment paper on a sheet pan',
-      'Lay the bacon on top of the parchment paper',
-      'Bake for 15 to 20 mins until the bacon is really crispy',
-      'Drain on paper towels and server'
-    ],
-    numOfLikes: 2000,
-    numOfDislikes: 50
-  },
-  {
-    _id: new ObjectID(),
-    name: "Test 3",
-    description: 'Fake description 1',
-    image: {
-      _id: 'd2syxoq3xatkj516r3wb',
-      versionId: 'v1491336195',
-      imageType: 'jpg'
-    },
-    ingredients: [
-      {
-        _id: ingredients[INGREDIENT_BACON]._id,
-        quantity: "500g",
-        name: ingredients[INGREDIENT_BACON].name
-      }
-    ],
-    cookingTime: 22,
-    numOfMeals: 4,
-    instructions: [
-      'Preheat oven to 400 degrees Fahrenheit',
-      'Place a sheet of parchment paper on a sheet pan',
-      'Lay the bacon on top of the parchment paper',
-      'Bake for 15 to 20 mins until the bacon is really crispy',
-      'Drain on paper towels and server'
-    ],
-    numOfLikes: 2000,
-    numOfDislikes: 50
-  },
-  {
-    _id: new ObjectID(),
-    name: "Test 4",
-    description: 'Fake description 1',
-    image: {
-      _id: 'd2syxoq3xatkj516r3wb',
-      versionId: 'v1491336195',
-      imageType: 'jpg'
-    },
-    ingredients: [
-      {
-        _id: ingredients[INGREDIENT_BACON]._id,
-        quantity: "500g",
-        name: ingredients[INGREDIENT_BACON].name
-      }
-    ],
-    cookingTime: 22,
-    numOfMeals: 4,
-    instructions: [
-      'Preheat oven to 400 degrees Fahrenheit',
-      'Place a sheet of parchment paper on a sheet pan',
-      'Lay the bacon on top of the parchment paper',
-      'Bake for 15 to 20 mins until the bacon is really crispy',
-      'Drain on paper towels and server'
-    ],
-    numOfLikes: 2000,
-    numOfDislikes: 50
-  },
-  {
-    _id: new ObjectID(),
-    name: "Test 5",
-    description: 'Fake description 1',
-    image: {
-      _id: 'd2syxoq3xatkj516r3wb',
-      versionId: 'v1491336195',
-      imageType: 'jpg'
-    },
-    ingredients: [
-      {
-        _id: ingredients[INGREDIENT_BACON]._id,
-        quantity: "500g",
-        name: ingredients[INGREDIENT_BACON].name
-      }
-    ],
-    cookingTime: 22,
-    numOfMeals: 4,
-    instructions: [
-      'Preheat oven to 400 degrees Fahrenheit',
-      'Place a sheet of parchment paper on a sheet pan',
-      'Lay the bacon on top of the parchment paper',
-      'Bake for 15 to 20 mins until the bacon is really crispy',
-      'Drain on paper towels and server'
-    ],
-    numOfLikes: 2000,
-    numOfDislikes: 50
-  },
-  {
-    _id: new ObjectID(),
-    name: "Test 6",
-    description: 'Fake description 1',
-    image: {
-      _id: 'd2syxoq3xatkj516r3wb',
-      versionId: 'v1491336195',
-      imageType: 'jpg'
-    },
-    ingredients: [
-      {
-        _id: ingredients[INGREDIENT_BACON]._id,
-        quantity: "500g",
-        name: ingredients[INGREDIENT_BACON].name
-      }
-    ],
-    cookingTime: 22,
-    numOfMeals: 4,
-    instructions: [
-      'Preheat oven to 400 degrees Fahrenheit',
-      'Place a sheet of parchment paper on a sheet pan',
-      'Lay the bacon on top of the parchment paper',
-      'Bake for 15 to 20 mins until the bacon is really crispy',
-      'Drain on paper towels and server'
-    ],
-    numOfLikes: 2000,
-    numOfDislikes: 50
-  },
-  {
-    _id: new ObjectID(),
-    name: "Test 7",
-    description: 'Fake description 1',
-    image: {
-      _id: 'd2syxoq3xatkj516r3wb',
-      versionId: 'v1491336195',
-      imageType: 'jpg'
-    },
-    ingredients: [
-      {
-        _id: ingredients[INGREDIENT_BACON]._id,
-        quantity: "500g",
-        name: ingredients[INGREDIENT_BACON].name
-      }
-    ],
-    cookingTime: 22,
-    numOfMeals: 4,
-    instructions: [
-      'Preheat oven to 400 degrees Fahrenheit',
-      'Place a sheet of parchment paper on a sheet pan',
-      'Lay the bacon on top of the parchment paper',
-      'Bake for 15 to 20 mins until the bacon is really crispy',
-      'Drain on paper towels and server'
-    ],
-    numOfLikes: 2000,
-    numOfDislikes: 50
+    numOfLikes: 800,
+    numOfDislikes: 79
   }
 ];
 
