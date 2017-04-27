@@ -128,7 +128,7 @@ class PostRecipeForm extends Component {
     Object.assign(recipeData, { ingredients: recipeData.ingredients.map(ingredient => Object.assign(ingredient, { _id: this.props.allIngredients.find(e => e.name == ingredient.name)._id })) });
     this.props.postRecipe(images && images[0], recipeData).then(() => {
       $('#submitRecipeModal').modal('open');
-      setTimeout(function() {
+      setTimeout(() => {
         this.props.reset();
         $('#submitRecipeModal').modal('close');
       }, 1000);
