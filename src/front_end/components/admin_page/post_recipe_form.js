@@ -129,6 +129,7 @@ class PostRecipeForm extends Component {
     this.props.postRecipe(images && images[0], recipeData).then(() => {
       $('#submitRecipeModal').modal('open');
       setTimeout(function() {
+        this.props.reset();
         $('#submitRecipeModal').modal('close');
       }, 1000);
     });
