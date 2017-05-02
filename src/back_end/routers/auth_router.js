@@ -36,6 +36,21 @@ passport.use(new FaceBookStrategy({
   }
 ));
 
+router.post('/facebook/login', (req, res) => {
+  const { id } = req.fields;
+  User.findOne({ id })
+    .then((user) => {
+      if (user) {
+        return user.generateAuthToken().then(token => res.send({ user: Object.assign({}, getUserPropertyForResponse(user), { token }) }));
+      } else {
+        const newUser = new User({ id });
+        return newUser.save();
+      }
+    })
+    .then(user => user && user.generateAuthToken().then(token => res.send({ user: Object.assign({}, getUserPropertyForResponse(user), { token }) })))
+    .catch(err => { done(err) });
+});
+
 
 router.post('/login', (req, res) => {
   const token = req.varIngredientSession.token || req.get('Authorization');
@@ -49,7 +64,7 @@ router.post('/login', (req, res) => {
 
   User.findByCredentials(email, password)
     .then(user => {
-      userData = _.pick(['_id', 'ingredients', 'favoriteRecipes', 'isAdmin', 'likedRecipes', 'dislikedRecipes', 'facebook_id'])(user);
+      userData = getUserPropertyForResponse(user);
       return user.generateAuthToken();
     })
     .then((token) => {
